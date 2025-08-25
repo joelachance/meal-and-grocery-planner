@@ -2,12 +2,12 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from marshmallow import Schema, fields, ValidationError, validate
-from app import bcrypt
+from marshmallow.validate import Range, Length
+from config import bcrypt, db
 import re
 from datetime import date, timedelta
 
-db = SQLAlchemy()
-password_regex = re.compile('^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])')
+password_regex = re.compile(r'^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])')
 
 class User(db.Model):
   __tablename__ = 'users'
@@ -116,7 +116,7 @@ class RecipeNote(db.Model):
 
 class RecipeNoteSchema(Schema):
   id = fields.Integer(dump_only=True)
-  note = db.String(required=True, validate=validate.Length(min=5, max=300, error="note must be between 5 and 300 characters"))
+  note = fields.String(required=True, validate=validate.Length(min=5, max=300, error="note must be between 5 and 300 characters"))
   date = fields.Date(required = True)
 
   recipe = fields.Nested(lambda:RecipeSchema(exclude='notes',))
