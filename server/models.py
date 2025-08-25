@@ -4,6 +4,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from marshmallow import Schema, fields, ValidationError, validate
 from app import bcrypt
 import re
+from datetime import date, timedelta
 
 db = SQLAlchemy()
 password_regex = re.compile('^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])')
@@ -36,6 +37,8 @@ class UserSchema(Schema):
   username = fields.String(required=True)
   password = fields.String(required=True, load_only=True)
 
+  recipes = fields.Nested(lambda:RecipeSchema(exclude='user',))
+
   @validates('username')
   def validate_username(self,value, **kwargs):
     if User.query.filter_by(username=value).first():
@@ -50,9 +53,28 @@ class Recipe(db.Model):
   __tablename__ = 'recipes'
 
   id = db.Column(db.Integer, primary_key=True)
-  title = db.Column(db.String)
-  instructions = db.Column
+  title = db.Column(db.String, nullable=False)
+  instructions = db.Column(db.String, nullable=False)
   date = db.Column(db.Date, nullable=False)
 
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   user = db.relationship('User', back_populates='recipes')
+
+class RecipeSchema(Schema):
+  id = fields.Integer(dump_only=True)
+  title = fields.String(required=True, validate=validate.Length(min=3, max=50, error="title must be between 3 and 50 characters long")) 
+  instructions = fields.String(required=True)
+  date = fields.Date(required = True)
+
+  user = fields.Nested(lambda:UserSchema(exclude='recipes',))
+
+  @validates('instructions')
+  def validate_instructions(self,value, **kwargs):
+    if len(value) == 0 or not value:
+      raise ValidationError("instructions cannot be blank")
+    
+  @validates('date')
+  def validate_date(self,value):
+    three_weeks_ago = date.today() - timedelta(weeks=2)
+    if value < three_weeks_ago:
+      raise ValidationError("Date is too far in the past, please choose another date")
