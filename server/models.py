@@ -16,6 +16,8 @@ class User(db.Model):
   username = db.Column(db.String, unique=True, nullable=False)
   _password_hash = db.Column(db.String, nullable=False)
 
+  recipes = db.relationship('Recipe', back_populates='user')
+
   @hybrid_property
   def password_hash(self):
     raise AttributeError('Password hashes may not be viewed.')
@@ -43,3 +45,14 @@ class UserSchema(Schema):
   def validate_password(self,value, **kwargs):
     if not password_regex.match(value):
       raise ValidationError("Password must be 8-20 characters long, contain at least one digit, one uppercase letter, one lowercase letter, and one special symbol.")
+    
+class Recipe(db.Model):
+  __tablename__ = 'recipes'
+
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String)
+  instructions = db.Column
+  date = db.Column(db.Date, nullable=False)
+
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+  user = db.relationship('User', back_populates='recipes')
