@@ -70,6 +70,7 @@ class RecipeSchema(Schema):
 
   user = fields.Nested(lambda:UserSchema(exclude='recipes',))
   ingredients = fields.Nested(lambda:IngredientSchema(exclude=['recipe']),many=True)
+  notes = fields.Nested(lambda:RecipeNoteSchema(exclude=['recipe']), many=True)
 
   @validates('instructions')
   def validate_instructions(self,value, **kwargs):
@@ -107,9 +108,16 @@ class RecipeNote(db.Model):
   __tablename__ = 'recipe_notes'
 
   id = db.Column(db.Integer, primary_key=True)
-  note = db.Column(db.String)
+  note = db.Column(db.String, nullable=False)
   date = db.Column(db.Date, nullable=False)
 
   recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
   recipe = db.relationship('Recipe', back_populates='notes')
+
+class RecipeNoteSchema(Schema):
+  id = fields.Integer(dump_only=True)
+  note = db.String(required=True, validate=validate.Length(min=5, max=300, error="note must be between 5 and 300 characters"))
+  date = fields.Date(required = True)
+
+  recipe = fields.Nested(lambda:RecipeSchema(exclude='notes',))
   
