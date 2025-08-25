@@ -59,6 +59,7 @@ class Recipe(db.Model):
 
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   user = db.relationship('User', back_populates='recipes')
+  ingredients = db.relationship('GroceryItem', back_populates='recipe')
 
 class RecipeSchema(Schema):
   id = fields.Integer(dump_only=True)
@@ -74,7 +75,19 @@ class RecipeSchema(Schema):
       raise ValidationError("instructions cannot be blank")
     
   @validates('date')
-  def validate_date(self,value):
+  def validate_date(self,value, **kwargs):
     three_weeks_ago = date.today() - timedelta(weeks=2)
     if value < three_weeks_ago:
       raise ValidationError("Date is too far in the past, please choose another date")
+    
+class GroceryItem(db.Model):
+  __tablename__ = 'grocery_items'
+
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String, nullable=False)
+  quantity = db.Column(db.Float, nullable=False)
+  quantity_description = db.Column(db.String, nullable=False) #cups, items, tblsp, g/oz ect. 
+  checked_off = db.Column(db.Boolean, default=False, nullable=False)
+
+  recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
+  recipe = db.relationship('Recipe', back_populates='ingredients')
