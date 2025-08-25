@@ -37,7 +37,7 @@ class UserSchema(Schema):
   username = fields.String(required=True)
   password = fields.String(required=True, load_only=True)
 
-  recipes = fields.Nested(lambda:RecipeSchema(exclude='user',))
+  recipes = fields.Nested(lambda:RecipeSchema(exclude=['user']), many=True)
 
   @validates('username')
   def validate_username(self,value, **kwargs):
@@ -59,7 +59,7 @@ class Recipe(db.Model):
 
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   user = db.relationship('User', back_populates='recipes')
-  ingredients = db.relationship('GroceryItem', back_populates='recipe')
+  ingredients = db.relationship('Ingredient', back_populates='recipe')
 
 class RecipeSchema(Schema):
   id = fields.Integer(dump_only=True)
@@ -68,6 +68,7 @@ class RecipeSchema(Schema):
   date = fields.Date(required = True)
 
   user = fields.Nested(lambda:UserSchema(exclude='recipes',))
+  ingredients = fields.Nested(lambda:IngredientSchema(exclude=['recipe']),many=True)
 
   @validates('instructions')
   def validate_instructions(self,value, **kwargs):
@@ -80,8 +81,8 @@ class RecipeSchema(Schema):
     if value < three_weeks_ago:
       raise ValidationError("Date is too far in the past, please choose another date")
     
-class GroceryItem(db.Model):
-  __tablename__ = 'grocery_items'
+class Ingredient(db.Model):
+  __tablename__ = 'ingredients'
 
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, nullable=False)
@@ -91,3 +92,12 @@ class GroceryItem(db.Model):
 
   recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
   recipe = db.relationship('Recipe', back_populates='ingredients')
+
+class IngredientSchema(Schema):
+  id = fields.Integer(dump_only=True)
+  name = fields.String(required=True, validate=validate.Length(min=3, max=25, error="name must be between 3 and 25 characters"))
+  quantity = fields.Float(required=True, validate=validate.Range(min=0.5, max=50.0, error='qantitiy must be between 0.5 and 50.0'))
+  quantity_description = fields.String(required=True, validate=validate.Length(min=1, max=20, error='description must be between 1 and 20 characters'))
+  checked_off = fields.Boolean(truthy={True}, falsy={False})
+
+  recipe = fields.Nested(lambda:RecipeSchema(exclude='ingredients',))
