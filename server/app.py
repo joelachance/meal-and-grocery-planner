@@ -44,11 +44,20 @@ class Signup(Resource):
    
 class Login(Resource):
   def post(self):
-    pass
+    login_data = request.get_json()
+    username = login_data.get('username')
+    password = login_data.get('password')
 
-class Logout(Resource):
-  def delete(self):
-    pass
+    user = User.query.filter(User.username == username).first()
+
+    if user and user.authenticate(password):
+      access_token = create_access_token(identity=str(user.id))
+      return make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
+    return {'error': 'incorrect username or password'}, 401
+
+# class Logout(Resource):
+#   def delete(self):
+#     pass
    
 class Recipes(Resource):
   #get all recipes for a user
@@ -120,7 +129,7 @@ class RecipeInformation(Resource):
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
-api.add_resource(Logout, '/logout', endpoint='logout')
+# api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(Recipes, '/api/recipes', endpoint='recipes')
 api.add_resource(Recipe, '/api/recipes/<int:recipe_id>', endpoint='recipe')
 api.add_resource(RecipeIngredients, '/api/recipes/<int:recipe_id>/ingredients', endpoint='ingredients')
