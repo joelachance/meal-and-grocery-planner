@@ -181,10 +181,38 @@ class RecipeIngredients(Resource):
 
 class RecipeIngredient(Resource): 
   #edit an ingredient
+  @jwt_required()
   def patch(self,recipe_id,id):
-    pass
+    from server.models import Ingredient, IngredientSchema, Recipe
+    user_id = get_jwt_identity()
+    #ensure recipe is connected to the user
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": f"Recipe {recipe_id} not found"}, 404
+    ingredient = Ingredient.query.filter(Ingredient.id == id, Ingredient.recipe_id == recipe_id).first()
+    if not ingredient:
+      return {"error": f"Ingredient {id} not found"}, 404
+    data = request.get_json()
+    schema = IngredientSchema(partial=True)
+    try: 
+      validated_data = schema.load(data)
+    except ValidationError as err:
+      return {'error': err.messages}, 400
+    
+    if 'name' in validated_data:
+      ingredient.name = validated_data['name']
+    if 'quantity' in validated_data:
+      ingredient.quantity = validated_data['quantity']
+    if 'quantity_description' in validated_data:
+      ingredient.quantity_description = validated_data['quantity_description']
+    if 'checked_off' in validated_data:
+      ingredient.checked_off = validated_data['checked_off']
+    db.session.commit()
+    db.session.commit()
+    return {'message': f'Ingredient {id} updated successfully'}, 200
 
   #delete an ingredient
+  @jwt_required()
   def delete(self,recipe_id,id):
     pass
 
