@@ -94,16 +94,21 @@ class Recipes(Resource):
       return {'error': 'error creating recipe'}, 422
 
 class Recipe(Resource):
-  #get one recipe for a user
-  def get(self,id):
-    pass
+  @jwt_required()
+  def get(self,recipe_id):
+    from server.models import Recipe, RecipeSchema
+    user_id = get_jwt_identity()
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": "Recipe not found"}, 404
+    return RecipeSchema().dump(recipe), 200
   
-  #edit a recipe
-  def patch(self,id):
-    pass
+  @jwt_required()
+  def patch(self,recipe_id):
+    from server.models import Recipe, RecipeSchema
 
   #delete a recipe
-  def delete(self,id):
+  def delete(self,recipe_id):
     pass
 
 class RecipeIngredients(Resource):
