@@ -116,5 +116,5 @@ class RecipeNoteSchema(Schema):
   note = fields.String(required=True, validate=validate.Length(min=5, max=300, error="note must be between 5 and 300 characters"))
   date = fields.Date(required = True)
 
-  recipe = fields.Nested(lambda:RecipeSchema(exclude='notes',))
+  recipe = fields.Nested(lambda:RecipeSchema(exclude=['notes']))
   

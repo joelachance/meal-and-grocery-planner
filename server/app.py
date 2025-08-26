@@ -230,17 +230,39 @@ class RecipeIngredient(Resource):
 
 class RecipeNotes(Resource):
   #create a note and add to a recipe
+  @jwt_required()
   def post(self,recipe_id):
-    pass
+    from server.models import RecipeNote, RecipeNoteSchema, Recipe
+    data = request.get_json()
+    user_id = get_jwt_identity()
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": "Recipe not found"}, 404
+    try:
+      note_data = RecipeNoteSchema().load(data)
+      note = RecipeNote(
+        note = note_data.get('note'),
+        date = note_data.get('date'),
+        recipe_id = recipe_id
+      )
+      db.session.add(note)
+      db.session.commit()
+      return RecipeNoteSchema().dump(note), 201
+    except ValidationError as err:
+      return {'error': err.messages}, 400
+    except IntegrityError:
+      return {'error': 'error creating note'}, 422
 
 class RecipeNote(Resource):
   #edit a note
+  @jwt_required()
   def patch(self,recipe_id,id):
-    pass
+    from server.models import RecipeNote, RecipeNoteSchema, Recipe
 
   #delete a note
+  @jwt_required()
   def delete(self,recipe_id,id):
-    pass
+    from server.models import RecipeNote, RecipeNoteSchema, Recipe
 
 class RecipesByCuisine(Resource):
   def get(self,cuisine):
