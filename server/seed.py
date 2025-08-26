@@ -12,7 +12,7 @@ with app.app_context():
 
   #create a user for testing purposes
   u1 = User(name='Marcus', username='flipz')
-  u1.password_hash = 'ilovePapaya'
+  u1.password = 'ilovePapaya'
 
   db.session.add(u1)
   db.session.commit()

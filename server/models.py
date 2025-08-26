@@ -19,13 +19,15 @@ class User(db.Model):
 
   recipes = db.relationship('Recipe', back_populates='user')
 
-  @hybrid_property
-  def password_hash(self):
+  @property
+  def password(self):
     raise AttributeError('Password hashes may not be viewed.')
   
-  @password_hash.setter
-  def password_hash(self,password):
-    password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+  @password.setter
+  def password(self,value, **kwargs):
+    if not password_regex.match(value):
+      raise ValidationError("Password must be 8-20 characters long, contain at least one digit, one uppercase letter, one lowercase letter, and one special symbol.")
+    password_hash = bcrypt.generate_password_hash(value.encode('utf-8'))
     self._password_hash = password_hash.decode('utf-8')
 
   def authenticate(self,password):
@@ -43,11 +45,6 @@ class UserSchema(Schema):
   def validate_username(self,value, **kwargs):
     if User.query.filter_by(username=value).first():
       raise ValidationError("Username already exists, Please choose a different one")
-    
-  @validates('password')
-  def validate_password(self,value, **kwargs):
-    if not password_regex.match(value):
-      raise ValidationError("Password must be 8-20 characters long, contain at least one digit, one uppercase letter, one lowercase letter, and one special symbol.")
     
 class Recipe(db.Model):
   __tablename__ = 'recipes'

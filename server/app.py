@@ -40,17 +40,21 @@ class Signup(Resource):
     username = signup_data.get('username')
     name = signup_data.get('name')
     password = signup_data.get('password')
-
-    user = User(username = username, name = name)
-    user.password_hash = password
     try:
+      #validate input, this will trigger any validation errors 
+      UserSchema().load(signup_data)
+      #create user instance
+      user = User(username = username, name = name)
+      user.password = password
       db.session.add(user)
       db.session.commit()
       #create a JSON Web Token
       access_token = create_access_token(identity=str(user.id))
       return make_response(jsonify(token = access_token, user = UserSchema().dump(user)), 200)
+    except ValidationError as err:
+      return{'error': err.messages},400
     except IntegrityError:
-      return {'error': 'unable to complete signup'}, 422
+      return {'error': 'username already exists or invalid data'}, 422
 
    
 class Login(Resource):
@@ -128,9 +132,16 @@ class Recipe(Resource):
     db.session.commit()
     return {'message': f'Recipe {recipe_id} updated successfully'}, 200
 
-  #delete a recipe
+  @jwt_required()
   def delete(self,recipe_id):
-    pass
+    from server.models import Recipe, RecipeSchema
+    user_id = get_jwt_identity()
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": "Recipe not found"}, 404
+    db.session.delete(recipe)
+    db.session.commit()
+    return {'message': f'Recipe {recipe_id} deleted successfully'}, 200
 
 class RecipeIngredients(Resource):
   #create an ingredient and add to a recipe
@@ -180,7 +191,6 @@ class RecipeInformation(Resource):
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
-# api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(Recipes, '/api/recipes', endpoint='recipes')
 api.add_resource(Recipe, '/api/recipes/<int:recipe_id>', endpoint='recipe')
 api.add_resource(RecipeIngredients, '/api/recipes/<int:recipe_id>/ingredients', endpoint='ingredients')
