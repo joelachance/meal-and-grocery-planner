@@ -89,7 +89,7 @@ class Ingredient(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, nullable=False)
   quantity = db.Column(db.Float, nullable=False)
-  quantity_description = db.Column(db.String, nullable=False) #cups, items, tblsp, g/oz ect. 
+  quantity_description = db.Column(db.String, nullable=False) 
   checked_off = db.Column(db.Boolean, default=False, nullable=False)
 
   recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))

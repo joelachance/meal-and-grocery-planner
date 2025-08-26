@@ -25,7 +25,22 @@ def add_headers(response):
 
 class Signup(Resource):
   def post(self):
-    pass
+    signup_data = request.get_json()
+    username = signup_data.get('username')
+    name = signup_data.get('name')
+    password = signup_data.get('password')
+
+    user = User(username = username, name = name)
+    user.password_hash = password
+    try:
+      db.session.add(user)
+      db.session.commit()
+      #create a JSON Web Token
+      access_token = create_access_token(identity=str(user.id))
+      return make_response(jsonify(token = access_token, user = UserSchema().dump(user)), 200)
+    except IntegrityError:
+      return {'error': 'unable to complete signup'}, 422
+
    
 class Login(Resource):
   def post(self):
