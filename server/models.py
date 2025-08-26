@@ -1,14 +1,11 @@
-# from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from marshmallow import Schema, fields, ValidationError, validate
 from marshmallow.validate import Range, Length
-from server.extensions import db
-from app import bcrypt
+from server.extensions import bcrypt
+from app import db
 import re
 from datetime import date, timedelta
-
-
 
 password_regex = re.compile(r'^(?=\S{8,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[^A-Za-z\s0-9])')
 

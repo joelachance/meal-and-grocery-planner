@@ -1,21 +1,12 @@
-# from config import app, jwt, bcrypt
-
 from flask_migrate import Migrate
-from flask import request, session, jsonify, make_response
+from flask import Flask, request, session, jsonify, make_response
 import requests
 from flask_restful import Resource, Api
 from sqlalchemy.exc import IntegrityError
-from extensions import db
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, jwt_required, exceptions
-from dotenv import load_dotenv
+from extensions import db, bcrypt
+from flask_jwt_extended import  JWTManager, create_access_token, get_jwt_identity, verify_jwt_in_request, jwt_required, exceptions
 import os
-from flask import Flask
 from dotenv import load_dotenv
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager
-from flask_restful import Api
-from server.models import User, UserSchema, Recipe, RecipeSchema, Ingredient, IngredientSchema, RecipeNote, RecipeNoteSchema
-
 
 load_dotenv()
 
@@ -27,17 +18,12 @@ app.config["JWT_SECRET_KEY"] = os.getenv('SECRET_KEY')
 app.json.compact = False
 
 db.init_app(app)
-
-# bcrypt.init_app(app)
-# jwt.init_app(app)
+bcrypt.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
-api_key = os.getenv('SPOONACULAR_API_KEY')
-bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
-
-
+api_key = os.getenv('SPOONACULAR_API_KEY')
 
 @app.after_request
 def add_headers(response):
@@ -48,6 +34,7 @@ def add_headers(response):
 
 class Signup(Resource):
   def post(self):
+    from server.models import User, UserSchema
     signup_data = request.get_json()
     username = signup_data.get('username')
     name = signup_data.get('name')
@@ -67,6 +54,7 @@ class Signup(Resource):
    
 class Login(Resource):
   def post(self):
+    from server.models import User, UserSchema
     login_data = request.get_json()
     username = login_data.get('username')
     password = login_data.get('password')
@@ -83,6 +71,7 @@ class Login(Resource):
 class Recipes(Resource):
   @jwt_required()
   def get(self):
+    from server.models import Recipe, RecipeSchema
     user_id = get_jwt_identity()
     recipes = Recipe.query.filter(Recipe.user_id == user_id).all()
     return RecipeSchema(many=True).dump(recipes), 200
