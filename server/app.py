@@ -56,7 +56,6 @@ class Signup(Resource):
     except IntegrityError:
       return {'error': 'username already exists or invalid data'}, 422
 
-   
 class Login(Resource):
   def post(self):
     from server.models import User, UserSchema
@@ -74,6 +73,7 @@ class Login(Resource):
 #handle logout on the frontend
    
 class Recipes(Resource):
+  #get all recipes for a user
   @jwt_required()
   def get(self):
     from server.models import Recipe, RecipeSchema
@@ -81,24 +81,29 @@ class Recipes(Resource):
     recipes = Recipe.query.filter(Recipe.user_id == user_id).all()
     return RecipeSchema(many=True).dump(recipes), 200
 
+  #create a recipe
   @jwt_required()
   def post(self):
     from server.models import Recipe, RecipeSchema
-    recipe_data = request.get_json()
-    recipe = Recipe(
+    data = request.get_json()
+    try:
+      recipe_data = RecipeSchema().load(data)
+      recipe = Recipe(
       title = recipe_data.get('title'), 
       instructions = recipe_data.get('instructions'),
       date = recipe_data.get('date'),
       user_id = get_jwt_identity()
       )
-    try:
       db.session.add(recipe)
       db.session.commit()
       return RecipeSchema().dump(recipe), 201
+    except ValidationError as err:
+      return {'error': err.messages}, 400
     except IntegrityError:
       return {'error': 'error creating recipe'}, 422
 
 class Recipe(Resource):
+  #get a recipe by id
   @jwt_required()
   def get(self,recipe_id):
     from server.models import Recipe, RecipeSchema
@@ -108,6 +113,7 @@ class Recipe(Resource):
       return {"error": "Recipe not found"}, 404
     return RecipeSchema().dump(recipe), 200
   
+  #update a recipe
   @jwt_required()
   def patch(self,recipe_id):
     from server.models import Recipe, RecipeSchema
@@ -132,6 +138,7 @@ class Recipe(Resource):
     db.session.commit()
     return {'message': f'Recipe {recipe_id} updated successfully'}, 200
 
+  #delete a recipe
   @jwt_required()
   def delete(self,recipe_id):
     from server.models import Recipe, RecipeSchema
@@ -144,9 +151,33 @@ class Recipe(Resource):
     return {'message': f'Recipe {recipe_id} deleted successfully'}, 200
 
 class RecipeIngredients(Resource):
-  #create an ingredient and add to a recipe
+  #create an ingredient
+  @jwt_required()
   def post(self,recipe_id):
-    pass
+    from server.models import Ingredient, IngredientSchema, Recipe
+    data = request.get_json()
+    user_id = get_jwt_identity()
+    #make sure recipe belongs to the user
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": "Recipe not found"}, 404
+    #if recipe does belong to the user, try to make the post request
+    try:
+      ingredient_data = IngredientSchema().load(data)
+      ingredient = Ingredient(
+        name = ingredient_data.get('name'),
+        quantity = ingredient_data.get('quantity'),
+        quantity_description = ingredient_data.get('quantity_description'),
+        checked_off = False,
+        recipe_id = recipe_id
+      )
+      db.session.add(ingredient)
+      db.session.commit()
+      return IngredientSchema().dump(ingredient), 201
+    except ValidationError as err:
+      return {'error': err.messages}, 400
+    except IntegrityError:
+      return {'error': 'error creating ingredient'}, 422
 
 class RecipeIngredient(Resource): 
   #edit an ingredient

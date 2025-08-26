@@ -99,7 +99,7 @@ class IngredientSchema(Schema):
   quantity_description = fields.String(required=True, validate=validate.Length(min=1, max=20, error='description must be between 1 and 20 characters'))
   checked_off = fields.Boolean(truthy={True}, falsy={False})
 
-  recipe = fields.Nested(lambda:RecipeSchema(exclude='ingredients',))
+  recipe = fields.Nested(lambda:RecipeSchema(exclude=['ingredients']))
 
 class RecipeNote(db.Model):
   __tablename__ = 'recipe_notes'
