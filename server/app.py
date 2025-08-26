@@ -283,6 +283,17 @@ class RecipeNote(Resource):
   @jwt_required()
   def delete(self,recipe_id,id):
     from server.models import RecipeNote, RecipeNoteSchema, Recipe
+    user_id = get_jwt_identity()
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": f"Recipe {recipe_id} not found"}, 404
+    note = RecipeNote.query.filter(RecipeNote.id == id, RecipeNote.recipe_id ==recipe_id).first()
+    if not note:
+      return {"error": f"Note {id} not found"}, 404
+    db.session.delete(note)
+    db.session.commit()
+    return {'message': f'Note {id} deleted successfully'}, 200
+
 
 class RecipesByCuisine(Resource):
   def get(self,cuisine):
