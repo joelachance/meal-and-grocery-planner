@@ -1,20 +1,43 @@
-from config import app, db, jwt, bcrypt
+# from config import app, jwt, bcrypt
+
 from flask_migrate import Migrate
 from flask import request, session, jsonify, make_response
 import requests
 from flask_restful import Resource, Api
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, exceptions
+from extensions import db
+from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, jwt_required, exceptions
 from dotenv import load_dotenv
 import os
-from models import User, UserSchema, Recipe, RecipeSchema, Ingredient, IngredientSchema, RecipeNote, RecipeNoteSchema
+from flask import Flask
+from dotenv import load_dotenv
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
+from flask_restful import Api
+from server.models import User, UserSchema, Recipe, RecipeSchema, Ingredient, IngredientSchema, RecipeNote, RecipeNoteSchema
+
+
+load_dotenv()
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] =  os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["JWT_SECRET_KEY"] = os.getenv('SECRET_KEY')
+app.json.compact = False
 
 db.init_app(app)
-bcrypt.init_app(app)
-jwt.init_app(app)
+
+# bcrypt.init_app(app)
+# jwt.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
 api_key = os.getenv('SPOONACULAR_API_KEY')
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+
+
+
 
 @app.after_request
 def add_headers(response):
@@ -55,14 +78,14 @@ class Login(Resource):
       return make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
     return {'error': 'incorrect username or password'}, 401
 
-# class Logout(Resource):
-#   def delete(self):
-#     pass
+#handle logout on the frontend
    
 class Recipes(Resource):
-  #get all recipes for a user
+  @jwt_required()
   def get(self):
-    pass
+    user_id = get_jwt_identity()
+    recipes = Recipe.query.filter(Recipe.user_id == user_id).all()
+    return RecipeSchema(many=True).dump(recipes), 200
 
   #create a recipe
   def post(self):

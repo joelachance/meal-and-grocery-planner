@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from app import app, db
-from models import User, Recipe, Ingredient, RecipeNote
+from server.models import User, Recipe, Ingredient, RecipeNote
 from datetime import date 
 
 with app.app_context():
