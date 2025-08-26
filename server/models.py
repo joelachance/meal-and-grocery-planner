@@ -17,7 +17,7 @@ class User(db.Model):
   username = db.Column(db.String, unique=True, nullable=False)
   _password_hash = db.Column(db.String, nullable=False)
 
-  recipes = db.relationship('Recipe', back_populates='user')
+  recipes = db.relationship('Recipe', back_populates='user', cascade='all, delete-orphan')
 
   @property
   def password(self):
@@ -56,8 +56,8 @@ class Recipe(db.Model):
 
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   user = db.relationship('User', back_populates='recipes')
-  ingredients = db.relationship('Ingredient', back_populates='recipe')
-  notes = db.relationship('RecipeNote', back_populates='recipe')
+  ingredients = db.relationship('Ingredient', back_populates='recipe', cascade='all, delete-orphan')
+  notes = db.relationship('RecipeNote', back_populates='recipe', cascade='all, delete-orphan')
 
 class RecipeSchema(Schema):
   id = fields.Integer(dump_only=True)
