@@ -214,7 +214,19 @@ class RecipeIngredient(Resource):
   #delete an ingredient
   @jwt_required()
   def delete(self,recipe_id,id):
-    pass
+    from server.models import Ingredient, IngredientSchema, Recipe
+    user_id = get_jwt_identity()
+    #make sure user can't delete someone else's ingredient
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": f"Recipe {recipe_id} not found"}, 404
+    #check that ingredient exists
+    ingredient = Ingredient.query.filter(Ingredient.id == id, Ingredient.recipe_id == recipe_id).first()
+    if not ingredient:
+      return {"error": f"Ingredient {id} not found"}, 404
+    db.session.delete(ingredient)
+    db.session.commit()
+    return {'message': f'Ingredient {id} deleted successfully'}, 200
 
 class RecipeNotes(Resource):
   #create a note and add to a recipe
