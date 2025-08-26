@@ -208,7 +208,6 @@ class RecipeIngredient(Resource):
     if 'checked_off' in validated_data:
       ingredient.checked_off = validated_data['checked_off']
     db.session.commit()
-    db.session.commit()
     return {'message': f'Ingredient {id} updated successfully'}, 200
 
   #delete an ingredient
@@ -258,6 +257,27 @@ class RecipeNote(Resource):
   @jwt_required()
   def patch(self,recipe_id,id):
     from server.models import RecipeNote, RecipeNoteSchema, Recipe
+    user_id = get_jwt_identity()
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": f"Recipe {recipe_id} not found"}, 404
+    note = RecipeNote.query.filter(RecipeNote.id == id, RecipeNote.recipe_id ==recipe_id).first()
+    if not note:
+      return {"error": f"Note {id} not found"}, 404
+    data = request.get_json()
+    schema = RecipeNoteSchema(partial=True)
+    try:
+      validated_data = schema.load(data)
+    except ValidationError as err:
+      return {'error': err.messages}, 400
+    
+    if 'note' in validated_data:
+      note.note = validated_data['note']
+    if 'date' in validated_data:
+      note.date = validated_data['date']
+    db.session.commit()
+    return {'message': f'Note {id} updated successfully'}, 200
+
 
   #delete a note
   @jwt_required()
