@@ -18,4 +18,4 @@ app.json.compact = False
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 jwt = JWTManager()
-api = Api()
+

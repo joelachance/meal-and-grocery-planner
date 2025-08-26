@@ -1,22 +1,20 @@
-from config import app, db, api, jwt, bcrypt
+from config import app, db, jwt, bcrypt
 from flask_migrate import Migrate
 from flask import request, session, jsonify, make_response
-from flask_restful import Resource
+import requests
+from flask_restful import Resource, Api
 from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import create_access_token, get_jwt_identity, verify_jwt_in_request, exceptions
+from dotenv import load_dotenv
+import os
 from models import User, UserSchema, Recipe, RecipeSchema, Ingredient, IngredientSchema, RecipeNote, RecipeNoteSchema
 
 db.init_app(app)
 bcrypt.init_app(app)
 jwt.init_app(app)
-api.init_app(app)
 migrate = Migrate(app, db)
-
-@app.before_request
-def check_if_logged_in():
-  open_access_list = ['signup','login']
-  if (request.endpoint) not in open_access_list and (not verify_jwt_in_request()):
-      return {'error': ['401 Unauthorized']}, 401
+api = Api(app)
+api_key = os.getenv('SPOONACULAR_API_KEY')
 
 @app.after_request
 def add_headers(response):
@@ -87,12 +85,36 @@ class RecipeNote(Resource):
   def delete(self,recipe_id,id):
     pass
 
-api.add_resource(Signup, '/signup')
-api.add_resource(Login, '/login')
-api.add_resource(Logout, '/logout')
-api.add_resource(Recipes, '/api/recipes')
-api.add_resource(Recipe, '/api/recipes/<int:recipe_id>')
-api.add_resource(RecipeIngredients, '/api/recipes/<int:recipe_id>/ingredients')
-api.add_resource(RecipeIngredient, '/api/recipes/<int:recipe_id>/ingredients/<int:id>')
-api.add_resource(RecipeNotes, '/api/recipes/<int:recipe_id>/notes')
-api.add_resource(RecipeNotes, '/api/recipes/<int:recipe_id>/notes/<int:id>')
+class RecipesByCuisine(Resource):
+  def get(self,cuisine):
+    url = 'https://api.spoonacular.com/recipes/complexSearch'
+    params={
+      "cuisine": cuisine,
+      "number": 50,
+      "apiKey": api_key
+    }
+    response = requests.get(url, params=params)
+    return response.json(), response.status_code
+  
+class RecipeInformation(Resource):
+  def get(self,recipe_id):
+    url = f'https://api.spoonacular.com/recipes/{recipe_id}/information'
+    params = {"apiKey": api_key}
+    response = requests.get(url, params=params)
+    return response.json(), response.status_code
+
+api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Logout, '/logout', endpoint='logout')
+api.add_resource(Recipes, '/api/recipes', endpoint='recipes')
+api.add_resource(Recipe, '/api/recipes/<int:recipe_id>', endpoint='recipe')
+api.add_resource(RecipeIngredients, '/api/recipes/<int:recipe_id>/ingredients', endpoint='ingredients')
+api.add_resource(RecipeIngredient, '/api/recipes/<int:recipe_id>/ingredients/<int:id>', endpoint='ingredient')
+api.add_resource(RecipeNotes, '/api/recipes/<int:recipe_id>/notes', endpoint='notes')
+api.add_resource(RecipeNote, '/api/recipes/<int:recipe_id>/notes/<int:id>', endpoint='note')
+api.add_resource(RecipesByCuisine, '/recipes/cuisine/<string:cuisine>', endpoint='recipesbycuisine')
+api.add_resource(RecipeInformation, '/recipes/information/<int:recipe_id>', endpoint='recipeinformation')
+
+
+if __name__ == '__main__':
+  app.run(port=5555, debug=True)
