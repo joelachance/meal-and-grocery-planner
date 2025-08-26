@@ -37,7 +37,7 @@ class UserSchema(Schema):
   username = fields.String(required=True)
   password = fields.String(required=True, load_only=True)
 
-  recipes = fields.Nested(lambda:RecipeSchema(exclude=['user']), many=True)
+  recipes = fields.Nested(lambda:RecipeSchema(exclude=['user',]), many=True)
 
   @validates('username')
   def validate_username(self,value, **kwargs):
@@ -68,7 +68,7 @@ class RecipeSchema(Schema):
   instructions = fields.String(required=True)
   date = fields.Date(required = True)
 
-  user = fields.Nested(lambda:UserSchema(exclude='recipes',))
+  user = fields.Nested(lambda:UserSchema(exclude=['recipes']))
   ingredients = fields.Nested(lambda:IngredientSchema(exclude=['recipe']),many=True)
   notes = fields.Nested(lambda:RecipeNoteSchema(exclude=['recipe']), many=True)
 

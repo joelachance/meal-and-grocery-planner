@@ -76,9 +76,22 @@ class Recipes(Resource):
     recipes = Recipe.query.filter(Recipe.user_id == user_id).all()
     return RecipeSchema(many=True).dump(recipes), 200
 
-  #create a recipe
+  @jwt_required()
   def post(self):
-    pass
+    from server.models import Recipe, RecipeSchema
+    recipe_data = request.get_json()
+    recipe = Recipe(
+      title = recipe_data.get('title'), 
+      instructions = recipe_data.get('instructions'),
+      date = recipe_data.get('date'),
+      user_id = get_jwt_identity()
+      )
+    try:
+      db.session.add(recipe)
+      db.session.commit()
+      return RecipeSchema().dump(recipe), 201
+    except IntegrityError:
+      return {'error': 'error creating recipe'}, 422
 
 class Recipe(Resource):
   #get one recipe for a user
