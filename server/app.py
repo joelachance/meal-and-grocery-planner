@@ -7,6 +7,7 @@ from extensions import db, bcrypt
 from flask_jwt_extended import  JWTManager, create_access_token, get_jwt_identity, verify_jwt_in_request, jwt_required, exceptions
 import os
 from dotenv import load_dotenv
+from marshmallow import ValidationError
 
 load_dotenv()
 
@@ -106,6 +107,26 @@ class Recipe(Resource):
   @jwt_required()
   def patch(self,recipe_id):
     from server.models import Recipe, RecipeSchema
+    user_id = get_jwt_identity()
+    recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
+    if not recipe:
+      return {"error": "Recipe not found"}, 404
+    data = request.get_json()
+    schema = RecipeSchema(partial=True)
+    try:
+      validated_data = schema.load(data)
+    except ValidationError as err:
+      return {'error': err.messages}, 400
+    
+    if 'title' in validated_data:
+      recipe.title = validated_data['title']
+    if 'instructions' in validated_data:
+      recipe.instructions = validated_data['instructions']
+    if 'date' in validated_data:
+      recipe.date = validated_data['date']
+
+    db.session.commit()
+    return {'message': f'Recipe {recipe_id} updated successfully'}, 200
 
   #delete a recipe
   def delete(self,recipe_id):
