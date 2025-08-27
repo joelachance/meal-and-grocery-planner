@@ -70,7 +70,13 @@ class Login(Resource):
       return make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
     return {'error': 'incorrect username or password'}, 401
 
-#handle logout on the frontend
+class WhoAmI(Resource):
+  @jwt_required()
+  def get(self):
+    from server.models import User, UserSchema
+    user_id = get_jwt_identity()
+    user = User.query.filter(User.id == user_id).first()
+    return UserSchema().dump(user), 200
    
 class Recipes(Resource):
   #get all recipes for a user
@@ -315,6 +321,7 @@ class RecipeInformation(Resource):
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(WhoAmI, '/me', endpoint='check_session')
 api.add_resource(Recipes, '/api/recipes', endpoint='recipes')
 api.add_resource(Recipe, '/api/recipes/<int:recipe_id>', endpoint='recipe')
 api.add_resource(RecipeIngredients, '/api/recipes/<int:recipe_id>/ingredients', endpoint='ingredients')
