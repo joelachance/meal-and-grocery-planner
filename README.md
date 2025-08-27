@@ -82,7 +82,8 @@ Retrieve information for a specific recipe from Spoonacular API
   <br>
 * Create a JSON Web Token Secret Key (can be anything) and paste into .env.local file <br>
 <br>
-* Get an api key from spoonacular API and paste into .env.local file <br> https://spoonacular.com/food-api <br>
+
+* Get an api key from spoonacular API and paste into .env.local file (https://spoonacular.com/food-api) 
   - go to the pricing tab
   - click "get started" on the free option
   - go to "profile & API Key"
