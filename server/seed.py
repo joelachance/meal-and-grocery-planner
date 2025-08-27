@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from app import app, db
-from models import User, Recipe, Ingredient, RecipeNote
+from server.models import User, Recipe, Ingredient, RecipeNote
 from datetime import date 
 
 with app.app_context():
@@ -12,7 +12,7 @@ with app.app_context():
 
   #create a user for testing purposes
   u1 = User(name='Marcus', username='flipz')
-  u1.password_hash = 'ilovePapaya'
+  u1.password = 'ilovePapaya'
 
   db.session.add(u1)
   db.session.commit()

@@ -1,9 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from marshmallow import Schema, fields, ValidationError, validate
 from marshmallow.validate import Range, Length
-from config import bcrypt, db
+from server.extensions import bcrypt
+from app import db
 import re
 from datetime import date, timedelta
 
@@ -17,15 +17,17 @@ class User(db.Model):
   username = db.Column(db.String, unique=True, nullable=False)
   _password_hash = db.Column(db.String, nullable=False)
 
-  recipes = db.relationship('Recipe', back_populates='user')
+  recipes = db.relationship('Recipe', back_populates='user', cascade='all, delete-orphan')
 
-  @hybrid_property
-  def password_hash(self):
+  @property
+  def password(self):
     raise AttributeError('Password hashes may not be viewed.')
   
-  @password_hash.setter
-  def password_hash(self,password):
-    password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+  @password.setter
+  def password(self,value, **kwargs):
+    if not password_regex.match(value):
+      raise ValidationError("Password must be 8-20 characters long, contain at least one digit, one uppercase letter, one lowercase letter, and one special symbol.")
+    password_hash = bcrypt.generate_password_hash(value.encode('utf-8'))
     self._password_hash = password_hash.decode('utf-8')
 
   def authenticate(self,password):
@@ -37,17 +39,12 @@ class UserSchema(Schema):
   username = fields.String(required=True)
   password = fields.String(required=True, load_only=True)
 
-  recipes = fields.Nested(lambda:RecipeSchema(exclude=['user']), many=True)
+  recipes = fields.Nested(lambda:RecipeSchema(exclude=['user',]), many=True)
 
   @validates('username')
   def validate_username(self,value, **kwargs):
     if User.query.filter_by(username=value).first():
       raise ValidationError("Username already exists, Please choose a different one")
-    
-  @validates('password')
-  def validate_password(self,value, **kwargs):
-    if not password_regex.match(value):
-      raise ValidationError("Password must be 8-20 characters long, contain at least one digit, one uppercase letter, one lowercase letter, and one special symbol.")
     
 class Recipe(db.Model):
   __tablename__ = 'recipes'
@@ -59,8 +56,8 @@ class Recipe(db.Model):
 
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   user = db.relationship('User', back_populates='recipes')
-  ingredients = db.relationship('Ingredient', back_populates='recipe')
-  notes = db.relationship('RecipeNote', back_populates='recipe')
+  ingredients = db.relationship('Ingredient', back_populates='recipe', cascade='all, delete-orphan')
+  notes = db.relationship('RecipeNote', back_populates='recipe', cascade='all, delete-orphan')
 
 class RecipeSchema(Schema):
   id = fields.Integer(dump_only=True)
@@ -68,7 +65,7 @@ class RecipeSchema(Schema):
   instructions = fields.String(required=True)
   date = fields.Date(required = True)
 
-  user = fields.Nested(lambda:UserSchema(exclude='recipes',))
+  user = fields.Nested(lambda:UserSchema(exclude=['recipes']))
   ingredients = fields.Nested(lambda:IngredientSchema(exclude=['recipe']),many=True)
   notes = fields.Nested(lambda:RecipeNoteSchema(exclude=['recipe']), many=True)
 
@@ -89,7 +86,7 @@ class Ingredient(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String, nullable=False)
   quantity = db.Column(db.Float, nullable=False)
-  quantity_description = db.Column(db.String, nullable=False) #cups, items, tblsp, g/oz ect. 
+  quantity_description = db.Column(db.String, nullable=False) 
   checked_off = db.Column(db.Boolean, default=False, nullable=False)
 
   recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'))
@@ -102,7 +99,7 @@ class IngredientSchema(Schema):
   quantity_description = fields.String(required=True, validate=validate.Length(min=1, max=20, error='description must be between 1 and 20 characters'))
   checked_off = fields.Boolean(truthy={True}, falsy={False})
 
-  recipe = fields.Nested(lambda:RecipeSchema(exclude='ingredients',))
+  recipe = fields.Nested(lambda:RecipeSchema(exclude=['ingredients']))
 
 class RecipeNote(db.Model):
   __tablename__ = 'recipe_notes'
@@ -119,5 +116,5 @@ class RecipeNoteSchema(Schema):
   note = fields.String(required=True, validate=validate.Length(min=5, max=300, error="note must be between 5 and 300 characters"))
   date = fields.Date(required = True)
 
-  recipe = fields.Nested(lambda:RecipeSchema(exclude='notes',))
+  recipe = fields.Nested(lambda:RecipeSchema(exclude=['notes']))
   
