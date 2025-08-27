@@ -36,10 +36,15 @@ export async function login(username, password) {
 
 export async function checkSession() {
   try {
-    const response = await fetch('http://127.0.0.1:5555/me')
+    const response = await fetch('http://127.0.0.1:5555/me', {
+      headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
     const data = await response.json()
     return data
   } catch (error) {
     console.error("Error, user is not logged in:", error)
+    return null
   }
 }
