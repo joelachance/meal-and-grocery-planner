@@ -1,11 +1,11 @@
-export async function signup(username, password, passwordConfirmation) {
+export async function signup(name, username, password) {
   try {
-    const response = await fetch('/signup', {
+    const response = await fetch('http://127.0.0.1:5555/signup', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({username,password, password_confirmation: passwordConfirmation})
+      body: JSON.stringify({name, username,password})
     })
     const data = await response.json()
     localStorage.setItem("token", data.token)
@@ -18,7 +18,7 @@ export async function signup(username, password, passwordConfirmation) {
 
 export async function login(username, password) {
   try {
-    const response = await fetch('/login', {
+    const response = await fetch('http://127.0.0.1:5555/login', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -33,13 +33,13 @@ export async function login(username, password) {
     return data
   } catch (error) {
     console.error("Error logging in:", error)
-    return { error: ["Network error"] }
+    return { error: ["Network error, please try again"] }
   }
 }
 
 export async function checkSession() {
   try {
-    const response = await fetch('/me', {
+    const response = await fetch('http://127.0.0.1:5555/me', {
       headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`
       }
