@@ -8,7 +8,7 @@ import Home from './pages/Home'
 import Recipes from './pages/Recipes'
 import Grocery from './pages/Grocery'
 import {checkSession} from './api/signupLogin'
-
+import {UserContext} from "./UserContext"
 
 function App() {
   const [user, setUser] = useState(null)
@@ -25,10 +25,7 @@ function App() {
 
   if (loading) return ""
 
-  // function handleLogout() {
-  //   localStorage.removeItem('token')
-  //   setUser(null)
-  // }
+  
 
   function onLogin(token,user) {
     localStorage.setItem("token",token)
@@ -36,15 +33,18 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route element={<PrivateRoutes user={user} />}>
-        <Route path='/' element={<Home />}/>
-        <Route path='/recipes' element={<Recipes />}/>
-        <Route path='/grocery' element={<Grocery />}/>
-      </Route>
+    <UserContext.Provider value={setUser}>
+      <Routes>
+        <Route element={<PrivateRoutes user={user} />}>
+          <Route path='/' element={<Home />}/>
+          <Route path='/recipes' element={<Recipes />}/>
+          <Route path='/grocery' element={<Grocery />}/>
+        </Route>
+      
 
-      <Route path='/login' element={<Login onLogin={onLogin}/>}/>
-    </Routes>
+        <Route path='/login' element={<Login onLogin={onLogin}/>}/>
+      </Routes>
+    </UserContext.Provider>
   )
 }
 
