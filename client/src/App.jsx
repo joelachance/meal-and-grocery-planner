@@ -12,14 +12,18 @@ import {checkSession} from './api/signupLogin'
 
 function App() {
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getUser() {
       const loggedInUser = await checkSession()
       setUser(loggedInUser || null)
+      setLoading(false) 
     }
     getUser()
   },[])
+
+  if (loading) return ""
 
   // function handleLogout() {
   //   localStorage.removeItem('token')
