@@ -28,6 +28,8 @@ Allow users to create an account
 * `POST /login` <br>
 Users can login to their account by entering their username and password <br>
 JSON Web Token created upon login
+* `GET /me` <br>
+Returns the user if the user is logged in 
 * `GET /api/recipes` <br>
 Get all recipes <br>
 User's can only view their own recipes, verified with their JWT
@@ -71,6 +73,7 @@ Retrieve information for a specific recipe from Spoonacular API
   ```
 * Install necessarry dependencies
   ```bash
+  (in server directory)
   pip install -r requirements.txt
   ```
   ### Set up .env.local file
@@ -89,9 +92,17 @@ Retrieve information for a specific recipe from Spoonacular API
   - go to "profile & API Key"
   - copy your personal API key and paste into .env.local file <br>
   <br>
+* Run migration and seed the database (seeding is optional, you will be able to make your own account and add your own data in the app)
+  ```bash
+  (must be in the server directory)
+  flask db migrate
+  flask db upgrade head
+  python seed.py (optional)
+  ```
 * Starting the backend server
   ```bash
-  python app.py
+  (from the root directory, not server) 
+  python -m server.app
   ```
   ### Frontend
 * install necessarry dependencies

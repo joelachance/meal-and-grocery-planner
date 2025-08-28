@@ -65,7 +65,7 @@ class Login(Resource):
       return response
     return {'error': ['Incorrect username or password']}, 401
 
-class WhoAmI(Resource):
+class CheckSession(Resource):
   @jwt_required()
   def get(self):
     from server.models import User, UserSchema
@@ -325,7 +325,7 @@ def add_cors_headers(response):
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
-api.add_resource(WhoAmI, '/me', endpoint='check_session')
+api.add_resource(CheckSession, '/me', endpoint='check_session')
 api.add_resource(Recipes, '/api/recipes', endpoint='recipes')
 api.add_resource(Recipe, '/api/recipes/<int:recipe_id>', endpoint='recipe')
 api.add_resource(RecipeIngredients, '/api/recipes/<int:recipe_id>/ingredients', endpoint='ingredients')
