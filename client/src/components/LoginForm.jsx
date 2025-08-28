@@ -2,6 +2,7 @@ import React from "react"
 import { useState } from "react"
 import { login } from "../api/signupLogin"
 import { useNavigate } from 'react-router-dom'
+import '../styles/login.css'
 
 function LoginForm({onLogin}) {
   const [username, setUsername] = useState("")
