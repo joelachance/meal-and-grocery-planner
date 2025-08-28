@@ -8,7 +8,6 @@ from flask_jwt_extended import  JWTManager, create_access_token, get_jwt_identit
 import os
 from dotenv import load_dotenv
 from marshmallow import ValidationError
-from flask import send_from_directory
 
 load_dotenv()
 
@@ -48,11 +47,12 @@ class Signup(Resource):
     except ValidationError as err:
       return{'error': err.messages},400
     except IntegrityError:
-      return {'error': 'username already exists or invalid data'}, 422
+      return {'error': ['Oops! That username is already taken']}, 422
 
 class Login(Resource):
   def post(self):
     from server.models import User, UserSchema
+    
     login_data = request.get_json()
     username = login_data.get('username')
     password = login_data.get('password')
@@ -61,8 +61,10 @@ class Login(Resource):
 
     if user and user.authenticate(password):
       access_token = create_access_token(identity=str(user.id))
-      return make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
-    return {'error': 'incorrect username or password'}, 401
+      response = make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
+      response.headers['Access-Control-Allow-Origin'] = '*'
+      return response
+    return {'error': ['incorrect username or password']}, 401
 
 class WhoAmI(Resource):
   @jwt_required()
@@ -70,7 +72,9 @@ class WhoAmI(Resource):
     from server.models import User, UserSchema
     user_id = get_jwt_identity()
     user = User.query.filter(User.id == user_id).first()
-    return UserSchema().dump(user), 200
+    response = make_response(UserSchema().dump(user))
+    return response
+  
    
 class Recipes(Resource):
   #get all recipes for a user
@@ -100,7 +104,7 @@ class Recipes(Resource):
     except ValidationError as err:
       return {'error': err.messages}, 400
     except IntegrityError:
-      return {'error': 'error creating recipe'}, 422
+      return {'error': ['error creating recipe']}, 422
 
 class Recipe(Resource):
   #get a recipe by id
@@ -110,7 +114,7 @@ class Recipe(Resource):
     user_id = get_jwt_identity()
     recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
     if not recipe:
-      return {"error": "Recipe not found"}, 404
+      return {"error": ["Recipe not found"]}, 404
     return RecipeSchema().dump(recipe), 200
   
   #update a recipe
@@ -145,7 +149,7 @@ class Recipe(Resource):
     user_id = get_jwt_identity()
     recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
     if not recipe:
-      return {"error": "Recipe not found"}, 404
+      return {"error": ["Recipe not found"]}, 404
     db.session.delete(recipe)
     db.session.commit()
     return {'message': f'Recipe {recipe_id} deleted successfully'}, 200
@@ -160,7 +164,7 @@ class RecipeIngredients(Resource):
     #make sure recipe belongs to the user
     recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
     if not recipe:
-      return {"error": "Recipe not found"}, 404
+      return {"error": ["Recipe not found"]}, 404
     #if recipe does belong to the user, try to make the post request
     try:
       ingredient_data = IngredientSchema().load(data)
@@ -177,7 +181,7 @@ class RecipeIngredients(Resource):
     except ValidationError as err:
       return {'error': err.messages}, 400
     except IntegrityError:
-      return {'error': 'error creating ingredient'}, 422
+      return {'error': ['error creating ingredient']}, 422
 
 class RecipeIngredient(Resource): 
   #edit an ingredient
@@ -312,6 +316,13 @@ class RecipeInformation(Resource):
     params = {"apiKey": api_key}
     response = requests.get(url, params=params)
     return response.json(), response.status_code
+  
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5173'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, DELETE, OPTIONS'
+    return response
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
