@@ -9,6 +9,7 @@ import Recipes from './pages/Recipes'
 import Grocery from './pages/Grocery'
 import {checkSession} from './api/signupLogin'
 
+
 function App() {
   const [user, setUser] = useState(null)
 
@@ -19,6 +20,11 @@ function App() {
     }
     getUser()
   },[])
+
+  // function handleLogout() {
+  //   localStorage.removeItem('token')
+  //   setUser(null)
+  // }
 
   function onLogin(token,user) {
     localStorage.setItem("token",token)
