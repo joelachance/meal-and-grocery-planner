@@ -12,7 +12,6 @@ function LoginForm({onLogin}) {
   async function handleSubmit(event) {
     event.preventDefault()
     const loginData = await login(username, password)
-    console.log("login data:",loginData)
     if(!loginData.error) {
       onLogin(loginData.token, loginData.user)
       navigate('/')

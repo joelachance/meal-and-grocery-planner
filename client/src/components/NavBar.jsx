@@ -7,7 +7,7 @@ function NavBar() {
       <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
       <NavLink to="/recipes" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Recipes</NavLink>
       <NavLink to="/Grocery" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Grocery</NavLink>
-      <button onClick={handleLogout}>Logout</button>
+      <button>Logout</button>
     </nav>
   )
 }
