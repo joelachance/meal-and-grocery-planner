@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { login } from "../api/SignupLogin"
+import { login } from "../api/signupLogin"
 import { useNavigate } from 'react-router-dom'
 
 function LoginForm({onLogin}) {
