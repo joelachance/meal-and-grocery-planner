@@ -8,13 +8,11 @@ from flask_jwt_extended import  JWTManager, create_access_token, get_jwt_identit
 import os
 from dotenv import load_dotenv
 from marshmallow import ValidationError
-from flask_cors import CORS
 from flask import send_from_directory
 
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] =  os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
