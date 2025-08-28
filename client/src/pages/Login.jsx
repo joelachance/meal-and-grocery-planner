@@ -1,4 +1,5 @@
 import React from "react"
+import { useState } from "react";
 import LoginForm from '../components/LoginForm' 
 import SignupForm from '../components/SignupForm' 
 
@@ -9,14 +10,14 @@ function Login({onLogin}) {
       <>
         <LoginForm onLogin={onLogin}/>
         <p>Dont have an account?
-          <Button onClick={() => setShowLogin(false)}>Sign Up</Button>
+          <button onClick={() => setShowLogin(false)}>Sign Up</button>
         </p>
       </>
     ) : (
       <>
         <SignupForm onLogin={onLogin} />
         <p>Already have an account?
-          <Button onClick={() => setShowLogin(true)}>Log In</Button>
+          <button onClick={() => setShowLogin(true)}>Log In</button>
         </p>
       </>
     )

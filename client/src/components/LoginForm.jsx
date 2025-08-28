@@ -22,8 +22,8 @@ function LoginForm({onLogin}) {
     }
   }
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className='login-form-div'>
+      <form className='login-form' onSubmit={handleSubmit}>
         <div>
           <label htmlFor='username'>Username:</label>
           <input type='text' id='username' value={username} onChange={(e) => setUsername(e.target.value)}/>
