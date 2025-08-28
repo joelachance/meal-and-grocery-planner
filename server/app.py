@@ -3,15 +3,18 @@ from flask import Flask, request, session, jsonify, make_response
 import requests
 from flask_restful import Resource, Api
 from sqlalchemy.exc import IntegrityError
-from extensions import db, bcrypt
+from server.extensions import db, bcrypt
 from flask_jwt_extended import  JWTManager, create_access_token, get_jwt_identity, verify_jwt_in_request, jwt_required, exceptions
 import os
 from dotenv import load_dotenv
 from marshmallow import ValidationError
+from flask_cors import CORS
+from flask import send_from_directory
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] =  os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -25,13 +28,6 @@ api = Api(app)
 jwt = JWTManager(app)
 
 api_key = os.getenv('SPOONACULAR_API_KEY')
-
-@app.after_request
-def add_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    response.headers.add('Access-Control-Allow-Methods', "GET, POST, PATCH, DELETE")
-    return response
 
 class Signup(Resource):
   def post(self):
@@ -330,7 +326,6 @@ api.add_resource(RecipeNotes, '/api/recipes/<int:recipe_id>/notes', endpoint='no
 api.add_resource(RecipeNote, '/api/recipes/<int:recipe_id>/notes/<int:id>', endpoint='note')
 api.add_resource(RecipesByCuisine, '/recipes/cuisine/<string:cuisine>', endpoint='recipesbycuisine')
 api.add_resource(RecipeInformation, '/recipes/information/<int:recipe_id>', endpoint='recipeinformation')
-
 
 if __name__ == '__main__':
   app.run(port=5555, debug=True)
