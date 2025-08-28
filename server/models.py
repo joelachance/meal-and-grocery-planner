@@ -3,7 +3,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from marshmallow import Schema, fields, ValidationError, validate
 from marshmallow.validate import Range, Length
 from server.extensions import bcrypt
-from app import db
+from .app import db
 import re
 from datetime import date, timedelta
 
@@ -36,7 +36,7 @@ class User(db.Model):
 class UserSchema(Schema):
   id = fields.Integer(dump_only=True)
   name = fields.String(required = True, validate=validate.Length(min=1, max=50, error="name must be between 1 and 50 characters"))
-  username = fields.String(required=True)
+  username = fields.String(required=True, validate=validate.Length(min=1, error="Username cannot be blank"))
   password = fields.String(required=True, load_only=True)
 
   recipes = fields.Nested(lambda:RecipeSchema(exclude=['user',]), many=True)
