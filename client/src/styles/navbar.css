@@ -1,0 +1,55 @@
+/* style container holding the nav links and logout button */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #8FBC8F;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* style the div holding all of the nav links */
+.nav-links {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* style the nav links */
+.nav-link {
+  background-color: white;
+  text-decoration: none;
+  padding: 7px;
+  border-radius: 5px;
+  color: #585858;
+  font-size: 20px;
+  box-sizing: border-box; 
+}
+
+.nav-link:hover {
+  background-color: #DCEFE0;
+}
+
+.nav-link.active {
+  border-bottom: 3px solid #2E4D36;
+  font-weight: bold;
+  background-color: #DCEFE0;
+  padding: 7px 7px
+}
+
+/* style the logout button */
+.logout-button {
+  border: none;
+  background-color: white;
+  color: black;
+  text-decoration: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 15px;
+  box-sizing: border-box; 
+}
+
+.logout-button:hover {
+  background-color:	#BEBEBE;
+}

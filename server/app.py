@@ -3,7 +3,7 @@ from flask import Flask, request, session, jsonify, make_response
 import requests
 from flask_restful import Resource, Api
 from sqlalchemy.exc import IntegrityError
-from extensions import db, bcrypt
+from server.extensions import db, bcrypt
 from flask_jwt_extended import  JWTManager, create_access_token, get_jwt_identity, verify_jwt_in_request, jwt_required, exceptions
 import os
 from dotenv import load_dotenv
@@ -26,13 +26,6 @@ jwt = JWTManager(app)
 
 api_key = os.getenv('SPOONACULAR_API_KEY')
 
-@app.after_request
-def add_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    response.headers.add('Access-Control-Allow-Methods', "GET, POST, PATCH, DELETE")
-    return response
-
 class Signup(Resource):
   def post(self):
     from server.models import User, UserSchema
@@ -54,11 +47,12 @@ class Signup(Resource):
     except ValidationError as err:
       return{'error': err.messages},400
     except IntegrityError:
-      return {'error': 'username already exists or invalid data'}, 422
+      return {'error': ['Oops! That username is already taken']}, 422
 
 class Login(Resource):
   def post(self):
     from server.models import User, UserSchema
+    
     login_data = request.get_json()
     username = login_data.get('username')
     password = login_data.get('password')
@@ -67,10 +61,19 @@ class Login(Resource):
 
     if user and user.authenticate(password):
       access_token = create_access_token(identity=str(user.id))
-      return make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
-    return {'error': 'incorrect username or password'}, 401
+      response = make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
+      return response
+    return {'error': ['Incorrect username or password']}, 401
 
-#handle logout on the frontend
+class WhoAmI(Resource):
+  @jwt_required()
+  def get(self):
+    from server.models import User, UserSchema
+    user_id = get_jwt_identity()
+    user = User.query.filter(User.id == user_id).first()
+    response = make_response(UserSchema().dump(user))
+    return response
+  
    
 class Recipes(Resource):
   #get all recipes for a user
@@ -100,7 +103,7 @@ class Recipes(Resource):
     except ValidationError as err:
       return {'error': err.messages}, 400
     except IntegrityError:
-      return {'error': 'error creating recipe'}, 422
+      return {'error': ['error creating recipe']}, 422
 
 class Recipe(Resource):
   #get a recipe by id
@@ -110,7 +113,7 @@ class Recipe(Resource):
     user_id = get_jwt_identity()
     recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
     if not recipe:
-      return {"error": "Recipe not found"}, 404
+      return {"error": ["Recipe not found"]}, 404
     return RecipeSchema().dump(recipe), 200
   
   #update a recipe
@@ -145,7 +148,7 @@ class Recipe(Resource):
     user_id = get_jwt_identity()
     recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
     if not recipe:
-      return {"error": "Recipe not found"}, 404
+      return {"error": ["Recipe not found"]}, 404
     db.session.delete(recipe)
     db.session.commit()
     return {'message': f'Recipe {recipe_id} deleted successfully'}, 200
@@ -160,7 +163,7 @@ class RecipeIngredients(Resource):
     #make sure recipe belongs to the user
     recipe = Recipe.query.filter(Recipe.user_id == user_id, Recipe.id == recipe_id).first()
     if not recipe:
-      return {"error": "Recipe not found"}, 404
+      return {"error": ["Recipe not found"]}, 404
     #if recipe does belong to the user, try to make the post request
     try:
       ingredient_data = IngredientSchema().load(data)
@@ -177,7 +180,7 @@ class RecipeIngredients(Resource):
     except ValidationError as err:
       return {'error': err.messages}, 400
     except IntegrityError:
-      return {'error': 'error creating ingredient'}, 422
+      return {'error': ['error creating ingredient']}, 422
 
 class RecipeIngredient(Resource): 
   #edit an ingredient
@@ -312,9 +315,17 @@ class RecipeInformation(Resource):
     params = {"apiKey": api_key}
     response = requests.get(url, params=params)
     return response.json(), response.status_code
+  
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5173'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PATCH, DELETE, OPTIONS'
+    return response
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(WhoAmI, '/me', endpoint='check_session')
 api.add_resource(Recipes, '/api/recipes', endpoint='recipes')
 api.add_resource(Recipe, '/api/recipes/<int:recipe_id>', endpoint='recipe')
 api.add_resource(RecipeIngredients, '/api/recipes/<int:recipe_id>/ingredients', endpoint='ingredients')
@@ -323,7 +334,6 @@ api.add_resource(RecipeNotes, '/api/recipes/<int:recipe_id>/notes', endpoint='no
 api.add_resource(RecipeNote, '/api/recipes/<int:recipe_id>/notes/<int:id>', endpoint='note')
 api.add_resource(RecipesByCuisine, '/recipes/cuisine/<string:cuisine>', endpoint='recipesbycuisine')
 api.add_resource(RecipeInformation, '/recipes/information/<int:recipe_id>', endpoint='recipeinformation')
-
 
 if __name__ == '__main__':
   app.run(port=5555, debug=True)
