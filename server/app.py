@@ -64,7 +64,7 @@ class Login(Resource):
       response = make_response(jsonify(token = access_token, user = UserSchema().dump(user)),200)
       response.headers['Access-Control-Allow-Origin'] = '*'
       return response
-    return {'error': ['incorrect username or password']}, 401
+    return {'error': ['Incorrect username or password']}, 401
 
 class WhoAmI(Resource):
   @jwt_required()
