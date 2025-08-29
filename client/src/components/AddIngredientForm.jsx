@@ -2,7 +2,8 @@ import {addIngredient} from '../api/ingredients'
 import {useState} from 'react'
 
 function AddIngredientForm({recipeId}) {
-  const [newIngredient, setNewIngredient] = useState({name: "",quantity: "", quantity_description: "", recipe_id: recipeId })
+  const [newIngredient, setNewIngredient] = useState({name: "",quantity: "", quantity_description: "", recipe_id: recipeId, checked_off: false })
+  const [errors, setErrors] = useState({})
 
   function handleChange(event) {
     const {name,value} = event.target
@@ -12,10 +13,23 @@ function AddIngredientForm({recipeId}) {
     }))
   }
 
+  async function handleSubmit(event) {
+    event.preventDefault()
+
+    const result = await addIngredient(newIngredient, recipeId)
+    if (!result.error) {
+      alert('Ingredient(s) successfully added!')
+      setNewIngredient({name: "",quantity: "", quantity_description: "", recipe_id: recipeId, checked_off: false })
+    } else {
+      alert('Error adding ingredient(s), please try again.')
+      setErrors(result.error)
+    }
+  }
+
 
   return (
     <div className='add-ingredient-form-div'>
-      <form className='add-ingredient-form'>
+      <form className='add-ingredient-form' onSubmit={handleSubmit}>
         <div>
           <label htmlFor='name'>Name:</label>
           <input id='name' name='name' type='text' value={newIngredient.name} onChange={handleChange}/>
@@ -27,6 +41,9 @@ function AddIngredientForm({recipeId}) {
         <div>
           <label htmlFor='quantity_description'>Quantity description (oz, cups, lbs, ect.):</label>
           <input id='quantity_description' name='quantity_description' type='text' value={newIngredient.quantity_description} onChange={handleChange}/>
+        </div>
+        <div>
+          <button type='submit'>Submit</button>
         </div>
       </form>
     </div>
