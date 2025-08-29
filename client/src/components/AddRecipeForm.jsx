@@ -38,10 +38,11 @@ function AddRecipeForm() {
     //call POST request
     const result = await createRecipe(newRecipe)
     if (!result.error) {
-      alert('Recipe successfully add!')
+      alert('Recipe successfully added!')
       setRecipeId(result.id)
+      setNewRecipe({title: "", instructions: "", date:"", user_id: ""})
     } else {
-      alert('Error adding recipe, please try again')
+      alert('Error adding recipe, please try again.')
       setErrors(result.error)
     }
   }
