@@ -1,3 +1,21 @@
 .recipes-content {
   margin: 20px
 }
+
+.cuisine-buttons {
+  gap:20px
+}
+
+.cuisine-buttons button {
+  margin-left:20px;
+  margin-right: 20px;
+  padding: 7px;
+  border-radius: 5px;
+  border: none;
+  background-color: #87CEFA75;
+}
+
+.cuisine-buttons button:hover {
+  background-color: #87CEFA;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
