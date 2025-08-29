@@ -1,7 +1,15 @@
 import {useState} from 'react'
+import {checkSession} from '../api/signupLogin'
+import {createRecipe} from '../api/signupLogin'
 
 function AddRecipeForm() {
+  const [checkUser, setCheckUser] = useState()
   const [newRecipe, setNewRecipe] = useState({title: "", instructions: "", date:"", user_id: ""})
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => {
+    checkSession().then(data => setCheckUser(data))
+  },[])
 
   function handleChange(event) {
     const {name, value} = event.target
@@ -11,10 +19,25 @@ function AddRecipeForm() {
     }))
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
 
-    
+    if (!checkUser) {
+      alert ('Error connecting to user, cannot create recipe.')
+      return
+    }
+
+    setNewRecipe(prev => ({
+      ...prev, ['user_id']: checkUser.id
+    }))
+
+    const result = await createRecipe(newRecipe)
+    if (!result.error) {
+      alert('Recipe successfully add!')
+    } else {
+      alert('Error adding recipe, please try again')
+      setErrors(result.error)
+    }
   }
 
   return (
