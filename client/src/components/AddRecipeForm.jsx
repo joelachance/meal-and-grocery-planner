@@ -3,7 +3,7 @@ import {checkSession} from '../api/signupLogin'
 import {createRecipe} from '../api/signupLogin'
 
 function AddRecipeForm() {
-  const [checkUser, setCheckUser] = useState()
+  const [checkUser, setCheckUser] = useState() //modify to get user from UserContext instead of calling checkSession again
   const [newRecipe, setNewRecipe] = useState({title: "", instructions: "", date:"", user_id: ""})
   const [errors, setErrors] = useState({})
   const [addIngredientStatus, setAddIngredientStatus] = useState(False)
@@ -68,12 +68,18 @@ function AddRecipeForm() {
             <input id='date' name='date' type='date' value={newRecipe.date} onClick={handleChange}/>
           </div>
           <div>
-            <button type='submit'>Add Recipe</button>
+            <button type='submit'>Submit</button>
           </div>
         </form>
       </div>
       <button onClick={handleAddIngredient}>Add Ingredients</button>
-      {addIngredientStatus && <AddIngredientForm recipe_id = {recipeId}/>}
+      {addIngredientStatus && 
+      <div> 
+        <button>Add another ingredient</button>
+        <AddIngredientForm recipe_id = {recipeId}/> 
+        <button>Submit All</button>
+      </div>
+      }
     </div>
   )
 }
