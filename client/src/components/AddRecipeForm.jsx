@@ -6,6 +6,8 @@ function AddRecipeForm() {
   const [checkUser, setCheckUser] = useState()
   const [newRecipe, setNewRecipe] = useState({title: "", instructions: "", date:"", user_id: ""})
   const [errors, setErrors] = useState({})
+  const [addIngredientStatus, setAddIngredientStatus] = useState(False)
+  const [recipeId, setRecipeId] = useState("")
 
   useEffect(() => {
     checkSession().then(data => setCheckUser(data))
@@ -34,10 +36,15 @@ function AddRecipeForm() {
     const result = await createRecipe(newRecipe)
     if (!result.error) {
       alert('Recipe successfully add!')
+      setRecipeId(result.id)
     } else {
       alert('Error adding recipe, please try again')
       setErrors(result.error)
     }
+  }
+
+  function handleAddIngredient() {
+    setAddIngredientStatus(True)
   }
 
   return (
@@ -61,7 +68,8 @@ function AddRecipeForm() {
           </div>
         </form>
       </div>
-      <button>Add Ingredients</button>
+      <button onClick={handleAddIngredient}>Add Ingredients</button>
+      {addIngredientStatus && <AddIngredientForm recipe_id = {recipeId}/>}
     </div>
   )
 }
