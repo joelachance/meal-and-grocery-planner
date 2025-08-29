@@ -24,15 +24,18 @@ function AddRecipeForm() {
   async function handleSubmit(event) {
     event.preventDefault()
 
+    //check if user is logged in
     if (!checkUser) {
       alert ('Error connecting to user, cannot create recipe.')
       return
     }
 
+    //add user id to recipe object
     setNewRecipe(prev => ({
       ...prev, ['user_id']: checkUser.id
     }))
 
+    //call POST request
     const result = await createRecipe(newRecipe)
     if (!result.error) {
       alert('Recipe successfully add!')
@@ -44,6 +47,7 @@ function AddRecipeForm() {
   }
 
   function handleAddIngredient() {
+    //render add ingredient forms
     setAddIngredientStatus(True)
   }
 
