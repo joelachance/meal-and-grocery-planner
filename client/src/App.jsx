@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import Recipes from './pages/Recipes'
 import Grocery from './pages/Grocery'
+import AddRecipeForm from './components/AddRecipeForm'
 import {checkSession} from './api/signupLogin'
 import {UserContext} from "./UserContext"
 
@@ -37,7 +38,9 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes user={user} />}>
           <Route path='/' element={<Home />}/>
-          <Route path='/recipes' element={<Recipes />}/>
+          <Route path='/recipes' element={<Recipes />}>
+            <Route path='/addRecipes' element={<AddRecipeForm />} />
+          </Route >
           <Route path='/grocery' element={<Grocery />}/>
         </Route>
       
