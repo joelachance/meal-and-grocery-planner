@@ -50,9 +50,10 @@ class Recipe(db.Model):
   __tablename__ = 'recipes'
 
   id = db.Column(db.Integer, primary_key=True)
-  title = db.Column(db.String, nullable=False)
-  instructions = db.Column(db.String, nullable=False)
+  title = db.Column(db.String, nullable=True)
+  instructions = db.Column(db.String, nullable=True)
   date = db.Column(db.Date, nullable=False)
+  api_id = db.Column(db.Integer, nullable=True)
 
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   user = db.relationship('User', back_populates='recipes')
@@ -61,9 +62,10 @@ class Recipe(db.Model):
 
 class RecipeSchema(Schema):
   id = fields.Integer(dump_only=True)
-  title = fields.String(required=True, validate=validate.Length(min=3, max=50, error="title must be between 3 and 50 characters long")) 
-  instructions = fields.String(required=True)
+  title = fields.String(required=False, allow_none=True, validate=validate.Length(min=3, max=50, error="title must be between 3 and 50 characters long")) 
+  instructions = fields.String(required=False, allow_none=True)
   date = fields.Date(required = True)
+  api_id = fields.Integer(required=False, allow_none=True)
 
   user = fields.Nested(lambda:UserSchema(exclude=['recipes']))
   ingredients = fields.Nested(lambda:IngredientSchema(exclude=['recipe']),many=True)
