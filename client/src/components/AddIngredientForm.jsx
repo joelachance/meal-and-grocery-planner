@@ -2,7 +2,7 @@ import {addIngredient} from '../api/ingredients'
 import {useState} from 'react'
 
 function AddIngredientForm({recipe_id}) {
-  const [newIngredient, setNewIngredient] = useState({name: "",quantity: "", quantity_description: "", recipe_id: recipe_id, checked_off: false })
+  const [newIngredient, setNewIngredient] = useState({name: "",quantity: "", quantity_description: "" })
   const [errors, setErrors] = useState({})
 
   function handleChange(event) {
@@ -16,10 +16,9 @@ function AddIngredientForm({recipe_id}) {
   async function handleSubmit(event) {
     event.preventDefault()
 
-    const result = await addIngredient(newIngredient, recipeId)
+    const result = await addIngredient(newIngredient, recipe_id)
     if (!result.error) {
       alert('Ingredient(s) successfully added!')
-      setNewIngredient({name: "",quantity: "", quantity_description: "", recipe_id: recipeId, checked_off: false })
     } else {
       alert('Error adding ingredient(s), please try again.')
       setErrors(result.error)

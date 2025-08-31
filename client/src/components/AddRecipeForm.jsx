@@ -4,6 +4,7 @@ import {createRecipe} from '../api/recipes'
 import AddIngredientForm from './AddIngredientForm'
 import {useContext} from "react"
 import {UserContext} from '../UserContext'
+import {useNavigate} from "react-router-dom"
 
 function AddRecipeForm() {
   const { user } = useContext(UserContext)
@@ -11,6 +12,8 @@ function AddRecipeForm() {
   const [errors, setErrors] = useState({})
   const [recipeId, setRecipeId] = useState("")
   const [ingredientForms, setIngredientForms] = useState([])
+
+  const navigate = useNavigate()
 
   function handleChange(event) {
     const {name, value} = event.target
@@ -34,12 +37,10 @@ function AddRecipeForm() {
 
     //call POST request
     const result = await createRecipe(newRecipe)
-    console.log("result:", result)
     if (!result.error) {
       alert('Recipe successfully added!')
       setRecipeId(result.id)
       console.log("recipe id:",result.id)
-      setNewRecipe({title: "", instructions: "", date:"", user_id: ""})
     } else {
       alert('Error adding recipe, please try again.')
       setErrors(result.error)
@@ -49,6 +50,10 @@ function AddRecipeForm() {
   function handleAddIngredient() {
     //render add ingredient forms
     setIngredientForms([...ingredientForms, {}])
+  }
+
+  function handleBackButton() {
+    navigate('/recipes')
   }
 
   return (
@@ -77,10 +82,14 @@ function AddRecipeForm() {
       {ingredientForms.length > 0 && 
       <div> 
         {ingredientForms.map((_,index) => (
-          <AddIngredientForm key={index} recipe_id={recipeId} />
+          <div> 
+            <h3>Ingredient {index + 1}</h3>
+            <AddIngredientForm key={index} recipe_id={recipeId} />
+          </div>
         ))} 
       </div>
       }
+      <button onClick={handleBackButton}>Back to Browse Recipes</button>
     </div>
   )
 }
