@@ -6,7 +6,6 @@ function RecipesByCuisine({cuisine}) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  console.log(cuisine)
   useEffect(() => {
     if (!cuisine) return
     async function fetchRecipes() {

@@ -32,15 +32,11 @@ function AddRecipeForm() {
       return
     }
 
-    console.log('new recipe:', newRecipe)
-   
-
     //call POST request
     const result = await createRecipe(newRecipe)
     if (!result.error) {
       alert('Recipe successfully added!')
       setRecipeId(result.id)
-      console.log("recipe id:",result.id)
     } else {
       alert('Error adding recipe, please try again.')
       setErrors(result.error)
