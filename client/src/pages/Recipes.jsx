@@ -16,7 +16,7 @@ function Recipes() {
   }
 
   function handleCreateRecipe() {
-    navigate('/recipes//addRecipes')
+    navigate('/addRecipes')
   }
 
   return(

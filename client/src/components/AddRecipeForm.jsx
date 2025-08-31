@@ -1,17 +1,16 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {checkSession} from '../api/signupLogin'
-import {createRecipe} from '../api/signupLogin'
+import {createRecipe} from '../api/recipes'
+import AddIngredientForm from './AddIngredientForm'
+import {useContext} from "react"
+import {UserContext} from '../UserContext'
 
 function AddRecipeForm() {
-  const [checkUser, setCheckUser] = useState() //modify to get user from UserContext instead of calling checkSession again
-  const [newRecipe, setNewRecipe] = useState({title: "", instructions: "", date:"", user_id: ""})
+  const { user } = useContext(UserContext)
+  const [newRecipe, setNewRecipe] = useState({title: "", instructions: "", date:""})
   const [errors, setErrors] = useState({})
-  const [addIngredientStatus, setAddIngredientStatus] = useState(False)
   const [recipeId, setRecipeId] = useState("")
-
-  useEffect(() => {
-    checkSession().then(data => setCheckUser(data))
-  },[])
+  const [ingredientForms, setIngredientForms] = useState([])
 
   function handleChange(event) {
     const {name, value} = event.target
@@ -24,22 +23,22 @@ function AddRecipeForm() {
   async function handleSubmit(event) {
     event.preventDefault()
 
-    //check if user is logged in
-    if (!checkUser) {
+    // check if user is logged in
+    if (!user) {
       alert ('Error connecting to user, cannot create recipe.')
       return
     }
 
-    //add user id to recipe object
-    setNewRecipe(prev => ({
-      ...prev, ['user_id']: checkUser.id
-    }))
+    console.log('new recipe:', newRecipe)
+   
 
     //call POST request
     const result = await createRecipe(newRecipe)
+    console.log("result:", result)
     if (!result.error) {
       alert('Recipe successfully added!')
       setRecipeId(result.id)
+      console.log("recipe id:",result.id)
       setNewRecipe({title: "", instructions: "", date:"", user_id: ""})
     } else {
       alert('Error adding recipe, please try again.')
@@ -49,24 +48,25 @@ function AddRecipeForm() {
 
   function handleAddIngredient() {
     //render add ingredient forms
-    setAddIngredientStatus(True)
+    setIngredientForms([...ingredientForms, {}])
   }
 
   return (
     <div>
       <div className='add-recipe-form-div'>
+        <h1>Create Your Recipe</h1>
         <form className='add-recipe-form' onSubmit={handleSubmit}>
           <div>
             <label htmlFor='title'>Title:</label>
-            <input id='title' name='title' type='text' value={newRecipe.title} onClick={handleChange}/>
+            <input id='title' name='title' type='text' value={newRecipe.title} onChange={handleChange}/>
           </div>
           <div>
             <label htmlFor='instructions'>Instructions:</label>
-            <textarea id='instructions' name='instructions' type='text' value={newRecipe.instructions} onClick={handleChange}/>
+            <textarea id='instructions' name='instructions' type='text' value={newRecipe.instructions} onChange={handleChange}/>
           </div>
           <div>
             <label htmlFor='date'>Date:</label>
-            <input id='date' name='date' type='date' value={newRecipe.date} onClick={handleChange}/>
+            <input id='date' name='date' type='date' value={newRecipe.date} onChange={handleChange}/>
           </div>
           <div>
             <button type='submit'>Submit</button>
@@ -74,11 +74,11 @@ function AddRecipeForm() {
         </form>
       </div>
       <button onClick={handleAddIngredient}>Add Ingredients</button>
-      {addIngredientStatus && 
+      {ingredientForms.length > 0 && 
       <div> 
-        <button>Add another ingredient</button>
-        <AddIngredientForm recipe_id = {recipeId}/> 
-        <button>Submit All</button>
+        {ingredientForms.map((_,index) => (
+          <AddIngredientForm key={index} recipe_id={recipeId} />
+        ))} 
       </div>
       }
     </div>

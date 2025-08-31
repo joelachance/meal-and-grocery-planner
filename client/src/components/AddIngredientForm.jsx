@@ -1,8 +1,8 @@
 import {addIngredient} from '../api/ingredients'
 import {useState} from 'react'
 
-function AddIngredientForm({recipeId}) {
-  const [newIngredient, setNewIngredient] = useState({name: "",quantity: "", quantity_description: "", recipe_id: recipeId, checked_off: false })
+function AddIngredientForm({recipe_id}) {
+  const [newIngredient, setNewIngredient] = useState({name: "",quantity: "", quantity_description: "", recipe_id: recipe_id, checked_off: false })
   const [errors, setErrors] = useState({})
 
   function handleChange(event) {

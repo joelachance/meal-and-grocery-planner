@@ -1,4 +1,4 @@
-async function createRecipe(content) {
+export async function createRecipe(content) {
   try {
     const response = await fetch('http://127.0.0.1:5555/api/recipes', {
       method: 'POST',

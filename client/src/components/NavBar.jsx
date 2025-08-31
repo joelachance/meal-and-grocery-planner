@@ -5,7 +5,7 @@ import {UserContext} from '../UserContext'
 import '../styles/navbar.css'
 
 function NavBar() {
-  const setUser = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
   function handleLogout() {
     localStorage.removeItem('token')
     setUser(null)

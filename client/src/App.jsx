@@ -34,13 +34,12 @@ function App() {
   }
 
   return (
-    <UserContext.Provider value={setUser}>
+    <UserContext.Provider value={{user,setUser}}>
       <Routes>
         <Route element={<PrivateRoutes user={user} />}>
           <Route path='/' element={<Home />}/>
-          <Route path='/recipes' element={<Recipes />}>
-            <Route path='/addRecipes' element={<AddRecipeForm />} />
-          </Route >
+          <Route path='/recipes' element={<Recipes />}/>
+          <Route path='/addRecipes' element={<AddRecipeForm />} />
           <Route path='/grocery' element={<Grocery />}/>
         </Route>
       
