@@ -4,9 +4,9 @@
   max-width: 600px;
   margin: 60px auto;
   padding: 30px;
-  background-color: #f9f9f9;
+  background-color: #87CEFA;
   border-radius: 12px;
-  /* box-shadow: 0 6px 18px rgba(0,0,0,0.1); */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -36,9 +36,104 @@
   box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
 }
 
+#instructions {
+  min-height: 90px;
+  min-width: 250px
+}
+
 .add-ingredients-button-div,
 .back-button-div {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+.back-button-div button {
+  margin-top: 20px;
+}
+
+
+.add-ingredients-button-div button {
+  margin-top: 0;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  background-color: 	#A8A8A8;
+  font-size: 17px;
+}
+
+.back-button-div button {
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #8FBC8F;
+  margin-bottom: 50px;
+  font-size: 17px;
+}
+
+.back-button-div button:hover {
+  background-color: #7AA87A;
+}
+
+.add-ingredients-button-div button:hover {
+  background-color: #C0C0C0;
+}
+
+/* style add ingredient forms */
+.add-ingredient-form-div {
+  justify-content: center;
+  justify-items: center;
+  margin: 20px 425px;
+  background-color: #fadadd;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-ingredient-form-div label {
+  margin: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-ingredient-form-div input {
+  max-width: 70px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-ingredient-form-div button {
+  margin-left: 20px;
+  border: 	2px solid #B0B0B0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.add-ingredient-form-div button:hover {
+  background-color: 			#B0B0B0;
+}
+
+.ingredient-header {
+  text-align: left;
+  margin: 20px 425px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* style add your own recipe button */
+.header-and-button {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.header-and-button button {
+  border: none;
+  height: 35px;
+  background-color: #DAA520;
+  margin-top: 25px;
+  border-radius: 5px;
+  padding: 7px;
+  font-size: 17px;
+  
+}
+

@@ -23,7 +23,7 @@ function Recipes() {
     <div>
       <NavBar />
       <div className="recipes-content">
-        <div>
+        <div className="header-and-button">
           <h1>Browse recipes</h1>
           <button onClick={handleCreateRecipe}>Add your own recipe</button>
         </div>

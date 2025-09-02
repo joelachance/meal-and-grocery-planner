@@ -81,7 +81,7 @@ function AddRecipeForm() {
       <div> 
         {ingredientForms.map((_,index) => (
           <div> 
-            <h3>Ingredient {index + 1}</h3>
+            <h3 className='ingredient-header'>Ingredient {index + 1}</h3>
             <AddIngredientForm key={index} recipe_id={recipeId} />
           </div>
         ))} 
