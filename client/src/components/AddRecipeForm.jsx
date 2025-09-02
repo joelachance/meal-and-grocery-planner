@@ -1,10 +1,10 @@
 import {useState, useEffect} from 'react'
-import {checkSession} from '../api/signupLogin'
 import {createRecipe} from '../api/recipes'
 import AddIngredientForm from './AddIngredientForm'
 import {useContext} from "react"
 import {UserContext} from '../UserContext'
 import {useNavigate} from "react-router-dom"
+import '../styles/recipeIngredientForms.css'
 
 function AddRecipeForm() {
   const { user } = useContext(UserContext)
@@ -74,7 +74,9 @@ function AddRecipeForm() {
           </div>
         </form>
       </div>
-      <button onClick={handleAddIngredient}>Add Ingredients</button>
+      <div className='add-ingredients-button-div'>
+      <button onClick={handleAddIngredient} className='add-ingredients-button' >Add Ingredients</button>
+      </div>
       {ingredientForms.length > 0 && 
       <div> 
         {ingredientForms.map((_,index) => (
@@ -85,7 +87,9 @@ function AddRecipeForm() {
         ))} 
       </div>
       }
+      <div className='back-button-div'>
       <button onClick={handleBackButton}>Back to Browse Recipes</button>
+      </div>
     </div>
   )
 }
