@@ -1,0 +1,36 @@
+.home-content {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-content button {
+  flex-shrink: 0;
+  height: fit-content;
+  margin-right: 50px;
+  margin-left: 50px;
+  padding: 10px;
+  font-size: 17px;
+  border: none;
+  border-radius: 5px;
+  background-color: #CBC3E3;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-content button:hover {
+  background-color: #D6CFEF;
+}
+
+.calendar-wrapper {
+  flex-grow: 1;     
+  min-width: 0;     
+  margin: 20px;  
+}
+
+.calendar-wrapper .fc {
+  width: 100%;
+  height: 100%;
+}
