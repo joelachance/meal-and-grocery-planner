@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import Recipes from './pages/Recipes'
 import Grocery from './pages/Grocery'
 import AddRecipeForm from './components/AddRecipeForm'
+import Calendar from './components/Calendar'
 import {checkSession} from './api/signupLogin'
 import {UserContext} from "./UserContext"
 
@@ -41,6 +42,7 @@ function App() {
           <Route path='/recipes' element={<Recipes />}/>
           <Route path='/addRecipes' element={<AddRecipeForm />} />
           <Route path='/grocery' element={<Grocery />}/>
+          <Route path='/calendar' element={<Calendar />} />
         </Route>
       
 
