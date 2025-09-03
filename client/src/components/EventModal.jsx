@@ -35,7 +35,7 @@ function EventModal({event, onClose}) {
         </div>
       }
       {editStatus === true &&
-        <EditRecipeForm setEditStatus={setEditStatus} recipe={recipeData}/>
+        <EditRecipeForm setEditStatus={setEditStatus} recipe={recipeData} onClose={onClose}/>
       }
     </div>
   )
