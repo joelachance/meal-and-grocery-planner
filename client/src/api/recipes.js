@@ -36,3 +36,18 @@ export async function updateRecipe(recipe_id, content) {
   }
 }
 
+export async function deleteRecipe(recipe_id) {
+  try {
+    const response = await fetch(`http://127.0.0.1:5555/api/recipes/${recipe_id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+    const data = await response.json()
+    return data
+  } catch(error) {
+    console.error("Error deleting recipe:", error)
+  }
+}
+
