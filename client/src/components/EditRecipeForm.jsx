@@ -52,7 +52,7 @@ function EditRecipeForm({setEditStatus, recipe}) {
         <div>
           <h2>Edit Ingredients for {recipe[0].title}</h2>
           <EditIngredientsForm recipe={recipe}/>
-          <button onClick={handleIngredientBack}>Back</button>
+          <button className='back-button' onClick={handleIngredientBack}>Back</button>
         </div>
       }
     </div>

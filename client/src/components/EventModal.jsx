@@ -25,7 +25,7 @@ function EventModal({event, onClose}) {
     <div className='event-modal'>
       <button className='x-button' onClick={onClose}>X</button>
       {editStatus === false &&
-        <div> 
+        <div className='recipe-modal-div'> 
           <h2>{event.title}</h2>
           <p>{event.start.toLocaleDateString()}</p>
           <div className='modal-buttons'> 
