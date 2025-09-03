@@ -23,11 +23,9 @@ function EventModal({event, onClose}) {
 
   return (
     <div className='event-modal'>
+      <button className='x-button' onClick={onClose}>X</button>
       {editStatus === false &&
         <div> 
-          <div className='x-button-div'> 
-            <button className='x-button' onClick={onClose}>X</button>
-          </div>
           <h2>{event.title}</h2>
           <p>{event.start.toLocaleDateString()}</p>
           <div className='modal-buttons'> 
