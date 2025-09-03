@@ -62,7 +62,7 @@ class Recipe(db.Model):
 
 class RecipeSchema(Schema):
   id = fields.Integer(dump_only=True)
-  title = fields.String(required=False, allow_none=True, validate=validate.Length(min=3, max=50, error="title must be between 3 and 50 characters long")) 
+  title = fields.String(required=False, allow_none=True)
   instructions = fields.String(required=False, allow_none=True)
   date = fields.Date(required = True)
   api_id = fields.Integer(required=False, allow_none=True)

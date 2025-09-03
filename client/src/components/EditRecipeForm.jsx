@@ -9,22 +9,42 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
   const [editedRecipe, setEditedRecipe] = useState({title: recipe[0].title, instructions: recipe[0].instructions, date: recipe[0].date})
   const [editIngredientsStatus, setEditIngredientsStatus] = useState(false)
   const [editRecipeMessage, setEditRecipeMessage] = useState(null)
+  const [errors, setErrors] = useState({})
   const { user } = useContext(UserContext)
 
   //form update and submit functions
   async function handleSubmit(event) {
     event.preventDefault()
-
+    //confirm there is a user
     if (!user) {
       alert ('Error connecting to user, cannot update recipe.')
       return
     }
+    //error handling for form
+    let newErrors = {}
+    if (!editedRecipe.title || editedRecipe.title.trim() === "") {
+      newErrors.title = 'Title cannot be empty'
+    }
+    if (!editedRecipe.instructions || editedRecipe.instructions.trim() === "") {
+      newErrors.instructions = 'Instructions cannot be empty'
+    }
+    if (!editedRecipe.date || editedRecipe.date === "") {
+      newErrors.date = 'Not a valid date'
+    }
+    const today = new Date()
+    const threeWeeksAgo = new Date()
+    threeWeeksAgo.setDate(today.getDate() - 21)
+    if(editedRecipe.date && new Date(editedRecipe.date) < threeWeeksAgo ) {
+      newErrors.date = 'Date is too far in the past'
+    }
+    setErrors(newErrors)
+    //dont make the Patch request if there is an error
+    if (Object.keys(newErrors).length > 0) return
     //call PATCH request
     const result = await updateRecipe(recipe[0].id, editedRecipe)
     if (!result.error) {
+      setErrors({})
       setEditRecipeMessage('Recipe successfully updated!')
-    } else {
-      setEditRecipeMessage('Error updating recipe, please try again.')
     }
   }
 
@@ -35,7 +55,6 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
       ...prev, [name]:value
     }))
   }
-
 
   //edit and back button functions
   function handleBack() {
@@ -63,14 +82,17 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
               <div>
                 <label htmlFor='title'>Title:</label>
                 <input id='title' name='title' type='text' value={editedRecipe.title} onChange={handleChange}/>
+                {errors && <p className='errors'>{errors.title}</p>}
               </div>
               <div>
                 <label htmlFor='instructions'>Instructions:</label>
                 <textarea id='instructions' name='instructions' type='text' value={editedRecipe.instructions} onChange={handleChange}/>
+                {errors && <p className='errors'>{errors.instructions}</p>}
               </div>
               <div>
                 <label htmlFor='date'>Date:</label>
                 <input id='date' name='date' type='date' value={editedRecipe.date} onChange={handleChange}/>
+                {errors && <p className='errors'>{errors.date}</p>}
               </div>
               <div>
                 <button className='submit-button' type='submit' >Submit</button>
