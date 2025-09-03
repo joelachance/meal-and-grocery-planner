@@ -1,3 +1,5 @@
+import '../styles/editRecipeForm.css'
+
 function EditRecipeForm({setEditStatus}) {
 
   function handleBack() {
@@ -5,10 +7,10 @@ function EditRecipeForm({setEditStatus}) {
   }
 
   return(
-    <div className='event-modal'>
-      <div>
+    <div>
+      <div className='edit-recipe-form-div'>
         <h2>Edit your Recipe</h2>
-        <form>
+        <form className='edit-recipe-form'>
           <div>
             <label htmlFor='title'>Title:</label>
             <input id='title' name='title' type='text' />
@@ -22,7 +24,10 @@ function EditRecipeForm({setEditStatus}) {
             <input id='date' name='date' type='date' ></input>
           </div>
           <div>
-            <button type='submit' >Submit</button>
+            <button className='submit-button' type='submit' >Submit</button>
+          </div>
+          <div>
+            <button className='edit-ingredients-button' >Edit Ingredients</button>
           </div>
         </form>
       </div>
