@@ -7,7 +7,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.home-content button {
+.home-content .start-button {
   flex-shrink: 0;
   height: fit-content;
   margin-right: 50px;
@@ -20,7 +20,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.home-content button:hover {
+.home-content .start-button:hover {
   background-color: #D6CFEF;
 }
 
@@ -41,7 +41,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  padding: 60px;
+  padding: 50px;
   z-index: 1000;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -52,7 +52,52 @@
   text-align: center; 
 }
 
-.event-modal button {
+.modal-buttons{
   margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }
+
+.edit-button,
+.delete-button {
+  background-color: #87CEFA;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  background-color: #A1D8FB;
+}
+
+.x-button-div {
+  display: flex;
+  align-items: left;
+}
+
+.x-button {
+  border: none;
+  background-color: #fff;
+  font-size: 20px;
+}
+
+.x-button:hover {
+  background-color: #D0D0D0;
+}
+
+.back-button {
+  background-color: #87CEFA;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+}
+
+.back-button:hover {
+  background-color: #A1D8FB;
+}
+
+
 
