@@ -15,7 +15,7 @@ function Home() {
     <div>
       <NavBar />
       <div className='home-content'>
-        <button onClick={handleStart}>Start Meal Planning</button>
+        <button className='start-button' onClick={handleStart}>Start Meal Planning</button>
         <Calendar className='calendar'/>
       </div>
     </div>
