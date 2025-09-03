@@ -19,3 +19,20 @@ export async function createRecipe(content) {
   }
 }
 
+export async function updateRecipe(recipe_id, content) {
+  try {
+    const response = await fetch(`http://127.0.0.1:5555/api/recipes/${recipe_id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify(content)
+    })
+    const data = await response.json()
+    return data
+  } catch(error) {
+    console.error("Error updating recipe:", error)
+  }
+}
+
