@@ -22,9 +22,15 @@ function EditIngredientsForm({recipe}) {
       return updated
     })
   }
-
+  if (recipeIngredientData.length === 0) {
+    return <div>
+        <p>Recipe has no ingredients</p>
+        <button>Add Ingredients</button>
+      </div>
+  }
   return (
     <div className='ingredients-div'>
+      <h2>Edit Ingredients for {recipe[0].title}</h2>
       {recipeIngredientData.map((ingredient, index) => (
         <div key={ingredient.id} className='ingredient-form-div'>
           <form className='ingredient-form'>

@@ -98,7 +98,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
                 <button className='submit-button' type='submit' >Submit</button>
               </div>
               <div>
-                <button className='edit-ingredients-button' onChange={handleEditIngredients} >Edit Ingredients</button>
+                <button className='edit-ingredients-button' onClick={handleEditIngredients} >Edit Ingredients</button>
               </div>
             </form> 
             <button className='back-button' onClick={handleBack}>Back</button>
@@ -120,7 +120,6 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
       }
       {editIngredientsStatus === true && 
         <div>
-          <h2>Edit Ingredients for {recipe[0].title}</h2>
           <EditIngredientsForm recipe={recipe}/>
           <button className='back-button' onClick={handleIngredientBack}>Back</button>
         </div>
