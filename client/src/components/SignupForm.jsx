@@ -53,14 +53,14 @@ function SignupForm({onLogin}) {
         </div>
         <div>
           <label htmlFor='password'>Password:</label>
-          <input type='password' id='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
+          <input type='password' id='password' value={password} onChange={(e) => setPassword(e.target.value)} autoComplete='off'/>
         </div>
         <div>
           <label htmlFor='confirmPassword'>Confirm password:</label>
           <input type='password' id='confirmPassword' value={passwordConfirmation} onChange={e => {
             setPasswordConfirmation(e.target.value)
             setTouchedConfirmation(true)
-            }}/>
+            }} autoComplete='off'/>
         </div>
         {errors &&
            Object.keys(errors).map(key => (
