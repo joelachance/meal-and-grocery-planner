@@ -58,3 +58,21 @@
 .edit-ingredients-button:hover {
   background-color: #fadadd;
 }
+
+.new-edit-ingredients-button {
+  background-color: #F5BFC2;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 17px;
+  margin-bottom: 20px;
+}
+
+.new-edit-ingredients-button:hover {
+  background-color: #fadadd;
+}
+
+.success-message {
+  color: #006400;
+  font-size: 20px;
+}
