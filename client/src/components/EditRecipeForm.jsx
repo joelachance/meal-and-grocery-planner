@@ -1,6 +1,10 @@
 import '../styles/editRecipeForm.css'
+import { useState } from "react"
 
-function EditRecipeForm({setEditStatus}) {
+function EditRecipeForm({setEditStatus, recipe}) {
+  const [editedRecipe, setEditedRecipe] = useState({title: recipe[0].title, instructions: recipe[0].instructions, date: recipe[0].date})
+
+  console.log(recipe)
 
   function handleBack() {
     setEditStatus(false)
@@ -13,15 +17,15 @@ function EditRecipeForm({setEditStatus}) {
         <form className='edit-recipe-form'>
           <div>
             <label htmlFor='title'>Title:</label>
-            <input id='title' name='title' type='text' />
+            <input id='title' name='title' type='text' value={editedRecipe.title}/>
           </div>
           <div>
             <label htmlFor='instructions'>Instructions:</label>
-            <textarea id='instructions' name='instructions' type='text' />
+            <textarea id='instructions' name='instructions' type='text' value={editedRecipe.instructions}/>
           </div>
           <div>
             <label htmlFor='date'>Date:</label>
-            <input id='date' name='date' type='date' ></input>
+            <input id='date' name='date' type='date' value={editedRecipe.date} />
           </div>
           <div>
             <button className='submit-button' type='submit' >Submit</button>
