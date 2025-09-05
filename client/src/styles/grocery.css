@@ -24,3 +24,7 @@
   border-radius: 5px;
   font-size: 15px;
 }
+
+.grocery-div ul {
+  list-style-type: none;
+}

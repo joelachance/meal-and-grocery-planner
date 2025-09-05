@@ -10,7 +10,7 @@ function Grocery() {
   const [recipes, setRecipes] = useState([])
   const [dates, setDates] = useState({ start: "", end: "" })
   const [filteredRecipes, setFilteredRecipes] = useState([])
-  const [recipeStatus, setRecipeStatus] = useState(true)
+  const [recipeStatus, setRecipeStatus] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
@@ -33,13 +33,17 @@ function Grocery() {
       return
     }
     setErrorMessage("")
-    setRecipeStatus(true)
+    
     const recipeData = recipes.filter((recipe) => {
       return recipe.date >= dates.start && recipe.date <= dates.end
     })
+
     setFilteredRecipes(recipeData)
+
     if(recipeData.length === 0) {
       setRecipeStatus(false)
+    } else {
+      setRecipeStatus(true)
     }
   }
 
@@ -57,9 +61,23 @@ function Grocery() {
           <button type='submit'>Submit</button>
         </form>
         {errorMessage && <p>{errorMessage}</p>}
-        {recipeStatus === false && !errorMessage ?
-          <p>No recipes found for these dates</p> :
-          <div> </div>
+        {!errorMessage && recipeStatus && filteredRecipes.length === 0 ?
+          <p>No recipes found for these dates</p> : ""
+        }
+        {recipeStatus === true && !errorMessage && filteredRecipes.length > 0 ?
+          <div> 
+            <h3>Grocery list for {dates.start} - {dates.end}</h3>
+            <ul>
+              {filteredRecipes.map((recipe) => (
+                recipe.ingredients.map((ingredient) => (
+                  <li key={ingredient.id}>
+                    <input type='checkbox' id={ingredient.name}/>
+                    <label htmlFor={ingredient.name}>{ingredient.name} ({ingredient.quantity} {ingredient.quantity_description}) </label>
+                  </li>
+                ))
+              ))}
+            </ul>
+          </div> : ""
         }
       </div>
     </>
