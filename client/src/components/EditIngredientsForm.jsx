@@ -15,7 +15,7 @@ function EditIngredientsForm({recipe}) {
   }, [recipe])
 
   if (editedIngredients.length === 0) {
-    return <div>
+    return <div className='no-ingredients-div'>
         <p>Recipe has no ingredients</p>
         <button>Add Ingredients</button>
       </div>

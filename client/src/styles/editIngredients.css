@@ -48,3 +48,25 @@
 .delete-ingredient-button:hover {
   background-color: #FF000060;
 }
+
+.no-ingredients-div {
+  padding: 5px;
+}
+
+.no-ingredients-div button {
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  font-size: 17px;
+  background-color: #F5BFC2;
+}
+
+.no-ingredients-div button:hover {
+  background-color: #fadadd;
+}
+
+.no-ingredients-div p {
+  font-size: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
