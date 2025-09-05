@@ -6,12 +6,12 @@ import {useContext} from "react"
 import {UserContext} from '../UserContext'
 
 function EditRecipeForm({setEditStatus, recipe, onClose}) {
-  console.log('recipe:', recipe)
   const [editedRecipe, setEditedRecipe] = useState({title: recipe[0].title, instructions: recipe[0].instructions, date: recipe[0].date})
   const [editIngredientsStatus, setEditIngredientsStatus] = useState(false)
   const [editRecipeMessage, setEditRecipeMessage] = useState(null)
   const [errors, setErrors] = useState({})
   const { user, setUser } = useContext(UserContext)
+  const currentRecipe = user.recipes.find(r => r.id === recipe[0].id)
 
   //form update and submit functions
   async function handleSubmit(event) {
@@ -125,7 +125,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
       }
       {editIngredientsStatus === true && 
         <div>
-          <EditIngredientsForm recipe={recipe}/>
+          <EditIngredientsForm recipe={[currentRecipe]}/>
           <button className='back-button' type='button' onClick={handleIngredientBack}>Back</button>
         </div>
       }

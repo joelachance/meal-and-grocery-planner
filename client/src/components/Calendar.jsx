@@ -18,8 +18,6 @@ function Calendar() {
     setEvents(eventsData)
   },[user.recipes])
 
-  console.log(events)
-
   function handleEventClick(clickInfo) {
     setSelectedEvent(clickInfo.event)
   }

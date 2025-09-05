@@ -5,11 +5,14 @@ import {useContext} from "react"
 import {UserContext} from '../UserContext'
 
 function EditIngredientsForm({recipe}) {
-  console.log(recipe)
   const { user, setUser } = useContext(UserContext)
-  // const recipeId = recipe[0].id
-  // const currentRecipe = user.recipes.find(r => r.id === recipeId)
-  const [editedIngredients, setEditedIngredients] = useState(recipe[0].ingredients)
+  const [editedIngredients, setEditedIngredients] = useState([])
+
+  useEffect(() => {
+    if (recipe[0]) {
+      setEditedIngredients(recipe[0].ingredients || [])
+    }
+  }, [recipe])
 
   if (editedIngredients.length === 0) {
     return <div>
@@ -45,7 +48,6 @@ function EditIngredientsForm({recipe}) {
     if (!result.error) {
       alert('Ingredient successfully updated')
       //find the recipe then find the ingredient and update it 
-      //allows the user to see the change immediately
       setUser(prev => ({
         ...prev,
         recipes: prev.recipes.map(r => 
@@ -53,6 +55,13 @@ function EditIngredientsForm({recipe}) {
             {...r, ingredients: r.ingredients.map(ing => 
               ing.id === ingredientId ? {...ing, ...rest} : ing)} :r)
       }))
+      //update local state as well
+      setEditedIngredients(prev => {
+        const updated = [...prev]
+        //rest (the updated variables) will override what the variables used to be
+        updated[index] = {...updated[index], ...rest}
+        return updated
+      })
     } else {
       alert('Error updating ingredient, please try again.')
     }
