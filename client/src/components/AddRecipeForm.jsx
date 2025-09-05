@@ -39,8 +39,9 @@ function AddRecipeForm() {
       //store the id in state so it can be passed to the add ingredient form
       setRecipeId(result.id)
       //update state so the new recipe shows up on the calendar
+      const addedRecipe = result
       setUser(prev => ({
-        ...prev, recipes: [...prev.recipes, newRecipe]
+        ...prev, recipes: [...prev.recipes, addedRecipe]
       }))
     } else {
       alert('Error adding recipe, please try again.')

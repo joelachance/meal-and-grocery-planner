@@ -11,11 +11,14 @@ function Calendar() {
   const [selectedEvent, setSelectedEvent] = useState(null)
 
   useEffect(() => {
-     const titles = user.recipes.map((event) => {
-      return {"title": event.title, "date": event.date}
+     const eventsData = user.recipes.map((recipe) => {
+      return {"id": recipe.id, "title": recipe.title, "date": recipe.date}
     })
-    setEvents(titles)
+    
+    setEvents(eventsData)
   },[user.recipes])
+
+  console.log(events)
 
   function handleEventClick(clickInfo) {
     setSelectedEvent(clickInfo.event)

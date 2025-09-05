@@ -6,6 +6,7 @@ import {useContext} from "react"
 import {UserContext} from '../UserContext'
 
 function EditRecipeForm({setEditStatus, recipe, onClose}) {
+  console.log('recipe:', recipe)
   const [editedRecipe, setEditedRecipe] = useState({title: recipe[0].title, instructions: recipe[0].instructions, date: recipe[0].date})
   const [editIngredientsStatus, setEditIngredientsStatus] = useState(false)
   const [editRecipeMessage, setEditRecipeMessage] = useState(null)

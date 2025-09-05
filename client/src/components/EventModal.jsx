@@ -12,7 +12,7 @@ function EventModal({event, onClose}) {
 
   useEffect(() => {
     const data = user.recipes.filter((recipe) => {
-      return recipe.title === event.title
+      return recipe.id === Number(event.id)
     })
 
     setRecipeData(data)

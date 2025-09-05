@@ -5,10 +5,11 @@ import {useContext} from "react"
 import {UserContext} from '../UserContext'
 
 function EditIngredientsForm({recipe}) {
+  console.log(recipe)
   const { user, setUser } = useContext(UserContext)
-  const recipeId = recipe[0].id
-  const currentRecipe = user.recipes.find(r => r.id === recipeId)
-  const [editedIngredients, setEditedIngredients] = useState(currentRecipe.ingredients)
+  // const recipeId = recipe[0].id
+  // const currentRecipe = user.recipes.find(r => r.id === recipeId)
+  const [editedIngredients, setEditedIngredients] = useState(recipe[0].ingredients)
 
   if (editedIngredients.length === 0) {
     return <div>

@@ -1,7 +1,11 @@
 import {addIngredient} from '../api/ingredients'
 import {useState} from 'react'
+import {UserContext} from '../UserContext'
+import {useContext} from "react"
+import {useNavigate} from "react-router-dom"
 
 function AddIngredientForm({recipe_id}) {
+  const { user, setUser } = useContext(UserContext)
   const [newIngredient, setNewIngredient] = useState({name: "",quantity: "", quantity_description: "" })
   const [errors, setErrors] = useState({})
 
@@ -19,6 +23,12 @@ function AddIngredientForm({recipe_id}) {
     const result = await addIngredient(newIngredient, recipe_id)
     if (!result.error) {
       alert('Ingredient(s) successfully added!')
+      const addedIngredient = result
+      setUser(prev => ({
+        ...prev, recipes: prev.recipes.map(recipe => recipe.id === recipe_id ?
+          {...recipe, ingredients: [...(recipe.ingredients || []), addedIngredient]} : recipe
+        )
+      }))
     } else {
       alert('Error adding ingredient(s), please try again.')
       setErrors(result.error)
