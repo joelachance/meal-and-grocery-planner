@@ -9,13 +9,21 @@ function EventModal({event, onClose}) {
   const { user, setUser } = useContext(UserContext)
   const [editStatus, setEditStatus] = useState(false)
   const [deleteRecipeMessage, setdeleteRecipeMessage] = useState(false)
-
+  const [ingredients, setIngredients] = useState([])
+  
   useEffect(() => {
     const data = user.recipes.filter((recipe) => {
       return recipe.id === Number(event.id)
     })
 
+    let ingredientArray = []
+
+    event.extendedProps.ingredients.map((ingredient) => {
+      ingredientArray.push(ingredient.name)
+    })
+
     setRecipeData(data)
+    setIngredients(ingredientArray)
   },[])
 
   function handleEditRecipe() {
@@ -33,7 +41,6 @@ function EventModal({event, onClose}) {
       }))
     }
   }
-  
 
   return (
     <div className='event-modal'>
@@ -44,6 +51,10 @@ function EventModal({event, onClose}) {
             <div className='recipe-modal-div'> 
               <h2>{event.title}</h2>
               <p>{event.start.toLocaleDateString()}</p>
+              <p>Instructions: {event.extendedProps.instructions}</p>
+              {event.extendedProps.ingredients.length > 0 && 
+                <p>Ingredients: {ingredients.join(', ')}</p>
+              }
               <div className='modal-buttons'> 
                 <button className='edit-button' onClick={handleEditRecipe}>Edit Recipe</button>
                 <button className='delete-button' onClick={handleDelete}>Delete</button>

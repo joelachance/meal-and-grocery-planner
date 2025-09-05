@@ -12,7 +12,7 @@ function Calendar() {
 
   useEffect(() => {
      const eventsData = user.recipes.map((recipe) => {
-      return {"id": recipe.id, "title": recipe.title, "date": recipe.date}
+      return {"id": recipe.id, "title": recipe.title, "date": recipe.date, "instructions": recipe.instructions, "ingredients": recipe.ingredients}
     })
     
     setEvents(eventsData)
