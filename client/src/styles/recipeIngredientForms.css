@@ -129,11 +129,14 @@
 .header-and-button button {
   border: none;
   height: 35px;
-  background-color: #DAA520;
+  background-color: #DCC6F0;
   margin-top: 25px;
   border-radius: 5px;
   padding: 7px;
   font-size: 17px;
-  
+}
+
+.header-and-button button:hover {
+  background-color: #E0CFF5;
 }
 

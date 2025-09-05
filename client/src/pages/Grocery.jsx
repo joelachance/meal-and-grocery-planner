@@ -14,6 +14,7 @@ function Grocery() {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   
 
+
   useEffect(() => {
     if(user) {
       setRecipes(user.recipes)
@@ -53,7 +54,8 @@ function Grocery() {
     <>
       <NavBar />
       <div className='grocery-div'>
-        <h2>Generate a Grocery List</h2>
+        <h2>Generate your Grocery List</h2>
+        <p className='directions'>Input dates and recieve a grocery list based on your scheduled recipes</p>
         <form onSubmit={handleSubmit} className='grocery-form'>
           <label htmlFor='start'>Start Date:</label>
           <input type='date' id='start' name='start'value={dates.start} onChange={handleChange}/>
@@ -61,13 +63,13 @@ function Grocery() {
           <input type='date' id='end' name='end' value={dates.end} onChange={handleChange}/>
           <button type='submit'>Submit</button>
         </form>
-        {errorMessage && <p>{errorMessage}</p>}
+        {errorMessage && <p className='error'>{errorMessage}</p>}
         {hasSubmitted && !errorMessage && filteredIngredients.length === 0 ?
-          <p>No recipes found for these dates</p> : ""
+          <p className='no-recipes-message'>No recipes found for these dates</p> : ""
         }
         {hasSubmitted && !errorMessage && filteredIngredients.length > 0 ?
-          <div> 
-            <h3>Grocery list for {dates.start} - {dates.end}</h3>
+          <div className='grocery-list-div'> 
+            {/* <h3>Groceries</h3> */}
             <ul className='grocery-list'>
               {filteredIngredients.map((ingredient) => (
                   <li key={ingredient.id}>

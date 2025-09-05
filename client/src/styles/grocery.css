@@ -1,12 +1,20 @@
 .grocery-div {
-  margin: 20px;
+  margin: 20px 0px 0px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .grocery-div h2 {
   font-size: 35px;
+  margin-bottom: 5px;
+}
+
+.grocery-div .directions {
+  margin-bottom: 30px;
+  color: #006400;
+  font-size: 17px;
 }
 
 .grocery-form label {
@@ -20,15 +28,53 @@
 }
 
 .grocery-form button {
-  padding: 5px;
+  padding: 7px;
+  border: none;
   border-radius: 5px;
   font-size: 15px;
+  background-color: #DCC6F0;
 }
 
-.grocery-div ul {
+.grocery-form button:hover {
+  background-color: #E0CFF5;
+}
+
+.grocery-list-div {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.grocery-list-div h3 {
+  font-size: 25px;
+  color: #006400
+}
+
+.grocery-list {
+  margin-top: 20px;
+  display: inline-block;
+  text-align: left;
   list-style-type: none;
+}
+
+.grocery-list li {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.grocery-list input {
+  margin-right: 15px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
 }
 
 .grocery-list input:checked + label.strikethrough {
   text-decoration: line-through;
+}
+
+.no-recipes-message,
+.error {
+  margin-top: 30px;
+  font-size: 20px;
+  color:  #FF0000
 }
