@@ -8,13 +8,7 @@ function EditIngredientsForm({recipe}) {
   const { user, setUser } = useContext(UserContext)
   const recipeId = recipe[0].id
   const currentRecipe = user.recipes.find(r => r.id === recipeId)
-  // const [recipeIngredientData, setRecipeIngredientData] = useState(recipe[0].ingredients)
   const [editedIngredients, setEditedIngredients] = useState(currentRecipe.ingredients)
-
-  // useEffect(() => {
-  //   setEditedIngredients(recipe[0].ingredients)
-  // }, [currentRecipe])
-
 
   if (editedIngredients.length === 0) {
     return <div>
@@ -80,14 +74,12 @@ function EditIngredientsForm({recipe}) {
       }))
 
       //remove the ingredient from local state so the form updates
-      // setRecipeIngredientData(prev => prev.filter((_, i) => i !== index))
       setEditedIngredients(prev => prev.filter((_, i) => i !== index))
     } else {
       alert('Error deleting ingredient, please try again.')
     }
   }
 
-  
   return (
     <div className='ingredients-div'>
       <h2>Edit Ingredients for {recipe[0].title}</h2>
