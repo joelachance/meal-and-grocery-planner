@@ -15,7 +15,7 @@ function Calendar() {
       return {"title": event.title, "date": event.date}
     })
     setEvents(titles)
-  },[])
+  },[user.recipes])
 
   function handleEventClick(clickInfo) {
     setSelectedEvent(clickInfo.event)

@@ -6,7 +6,7 @@ import { deleteRecipe } from "../api/recipes"
 
 function EventModal({event, onClose}) {
   const [recipeData, setRecipeData] = useState([])
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const [editStatus, setEditStatus] = useState(false)
   const [deleteRecipeMessage, setdeleteRecipeMessage] = useState(false)
 
@@ -27,6 +27,10 @@ function EventModal({event, onClose}) {
     const result = await deleteRecipe(recipe_id)
     if (!result.errors) {
       setdeleteRecipeMessage('Recipe successfully deleted')
+      setUser(prev => ({
+        ...prev,
+        recipes: prev.recipes.filter(r => r.id !== recipe_id)
+      }))
     }
   }
   

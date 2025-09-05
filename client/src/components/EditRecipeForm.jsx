@@ -10,7 +10,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
   const [editIngredientsStatus, setEditIngredientsStatus] = useState(false)
   const [editRecipeMessage, setEditRecipeMessage] = useState(null)
   const [errors, setErrors] = useState({})
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
 
   //form update and submit functions
   async function handleSubmit(event) {
@@ -45,6 +45,10 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
     if (!result.error) {
       setErrors({})
       setEditRecipeMessage('Recipe successfully updated!')
+      setUser(prev => ({
+        ...prev,
+        recipes: prev.recipes.map(r => r.id === recipe[0].id ? {...r, ...editedRecipe} : r)
+      }))
     }
   }
 
@@ -69,7 +73,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
     setEditIngredientsStatus(false)
   }
 
-  return(
+  return (
     <div>
       {/* display form for editing the recipe */}
       {editIngredientsStatus === false &&
@@ -98,7 +102,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
                 <button className='submit-button' type='submit' >Submit</button>
               </div>
               <div>
-                <button className='edit-ingredients-button' onClick={handleEditIngredients} >Edit Ingredients</button>
+                <button className='edit-ingredients-button' onClick={handleEditIngredients} type='button'>Edit Ingredients</button>
               </div>
             </form> 
             <button className='back-button' onClick={handleBack}>Back</button>
@@ -109,9 +113,9 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
               <h2>{editedRecipe.title}</h2>
               <p className='success-message'>{editRecipeMessage}</p>
               <div className='edit-recipe-form'>
-                <button className='new-edit-ingredients-button' onClick={handleEditIngredients} >Edit Ingredients</button>
+                <button className='new-edit-ingredients-button' type='button' onClick={handleEditIngredients} >Edit Ingredients</button>
               </div>
-              <button className='back-button' onClick={onClose}>Done</button>
+              <button className='back-button' onClick={onClose} type='button' >Done</button>
             </div>
           }
         </div>
@@ -121,7 +125,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
       {editIngredientsStatus === true && 
         <div>
           <EditIngredientsForm recipe={recipe}/>
-          <button className='back-button' onClick={handleIngredientBack}>Back</button>
+          <button className='back-button' type='button' onClick={handleIngredientBack}>Back</button>
         </div>
       }
     </div>
