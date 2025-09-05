@@ -28,3 +28,7 @@
 .grocery-div ul {
   list-style-type: none;
 }
+
+.grocery-list input:checked + label.strikethrough {
+  text-decoration: line-through;
+}
