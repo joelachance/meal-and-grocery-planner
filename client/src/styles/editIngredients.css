@@ -1,0 +1,72 @@
+.ingredient-form-div {
+  justify-content: center;
+  justify-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: row;
+  padding: 10px
+}
+
+.ingredient-form-div label {
+  margin: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 20px;
+}
+
+.ingredient-form-div input {
+  max-width: 70px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-bottom: 20px;
+  padding: 5px;
+  font-size: 15px;
+}
+
+.ingredient-submit-button {
+  margin-left: 20px;
+  border: none;
+  background-color: #8FBC8F;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.ingredient-submit-button:hover {
+  background-color: #A9D3A9;
+}
+
+.delete-ingredient-button {
+  margin-left: 20px;
+  border: none;
+  background-color: #FF000075;
+  padding: 7px;
+  border-radius: 5px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  margin-right: 20px;
+}
+
+.delete-ingredient-button:hover {
+  background-color: #FF000060;
+}
+
+.no-ingredients-div {
+  padding: 5px;
+}
+
+.no-ingredients-div button {
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  margin: 10px;
+  font-size: 17px;
+  background-color: #F5BFC2;
+}
+
+.no-ingredients-div button:hover {
+  background-color: #fadadd;
+}
+
+.no-ingredients-div p {
+  font-size: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

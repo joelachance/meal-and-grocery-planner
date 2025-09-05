@@ -1,0 +1,138 @@
+.home-content {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-content .start-button {
+  flex-shrink: 0;
+  height: fit-content;
+  margin-right: 50px;
+  margin-left: 50px;
+  padding: 10px;
+  font-size: 17px;
+  border: none;
+  border-radius: 5px;
+  background-color: #CBC3E3;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-content .start-button:hover {
+  background-color: #D6CFEF;
+}
+
+.calendar-wrapper {
+  flex-grow: 1;     
+  min-width: 0;     
+  margin: 20px;  
+}
+
+.calendar-wrapper .fc {
+  width: 100%;
+  height: 100%;
+}
+
+.home-directions {
+  text-align: center;
+  font-size: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #006400;
+}
+
+.event-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 50px;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  display: flex;            
+  flex-direction: column;  
+  align-items: center;     
+  text-align: center; 
+  width: 930px;    
+  max-width: 90%;  
+  height: auto; 
+  font-size: 17px;
+}
+
+.modal-buttons{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.recipe-modal-div {
+  margin-top: 70px;
+  margin-bottom: 70px;
+}
+
+.recipe-modal-div p {
+  margin-bottom: 30px;
+}
+
+.edit-button,
+.delete-button {
+  background-color: #87CEFA;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 17px;
+}
+
+.delete-button {
+  margin-left: 20px;
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  background-color: #A1D8FB;
+}
+
+.x-button-div {
+  display: flex;
+  align-items: left;
+}
+
+.x-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  border: none;
+  background-color: #fff;
+  font-size: 20px;
+}
+
+.x-button:hover {
+  background-color: #D0D0D0;
+}
+
+.back-button {
+  background-color: #87CEFA;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 17px;
+}
+
+.back-button:hover {
+  background-color: #A1D8FB;
+}
+
+.success-message {
+  color: #006400;
+  font-size: 20px;
+}
+
+
+
+

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from app import app, db
+from .app import app, db
 from server.models import User, Recipe, Ingredient, RecipeNote
 from datetime import date 
 
@@ -11,8 +11,8 @@ with app.app_context():
   User.query.delete()
 
   #create a user for testing purposes
-  u1 = User(name='Marcus', username='flipz')
-  u1.password = 'ilovePapaya'
+  u1 = User(name='Katya', username='katyaMaria98')
+  u1.password = 'Papaya01*'
 
   db.session.add(u1)
   db.session.commit()

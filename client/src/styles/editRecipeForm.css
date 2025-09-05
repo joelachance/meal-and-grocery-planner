@@ -1,0 +1,82 @@
+.edit-recipe-form-div {
+  justify-content: center;
+  justify-items: center; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.edit-recipe-form div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px
+}
+
+.edit-recipe-form label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #444;
+  text-align: left;
+}
+
+.edit-recipe-form input {
+  padding: 5px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 17px;
+}
+
+.edit-recipe-form textarea {
+  resize: none; 
+  overflow: auto;
+}
+
+.edit-recipe-form input:focus {
+  outline: none;
+  border-color: #7FFFD4;
+  box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+}
+
+.edit-recipe-form .submit-button,
+.edit-recipe-form .edit-ingredients-button {
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 17px;
+}
+
+.submit-button {
+  background-color: #8FBC8F;
+}
+
+.submit-button:hover {
+  background-color: #A9D3A9;
+}
+
+.edit-ingredients-button {
+  background-color: #F5BFC2;
+}
+
+.edit-ingredients-button:hover {
+  background-color: #fadadd;
+}
+
+.new-edit-ingredients-button {
+  background-color: #F5BFC2;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 17px;
+  margin-bottom: 20px;
+}
+
+.new-edit-ingredients-button:hover {
+  background-color: #fadadd;
+}
+
+.success-message {
+  color: #006400;
+  font-size: 20px;
+}
+
+.errors {
+  color: #FF0000
+}

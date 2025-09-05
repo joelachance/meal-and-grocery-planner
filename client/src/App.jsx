@@ -7,6 +7,8 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import Recipes from './pages/Recipes'
 import Grocery from './pages/Grocery'
+import AddRecipeForm from './components/AddRecipeForm'
+import Calendar from './components/Calendar'
 import {checkSession} from './api/signupLogin'
 import {UserContext} from "./UserContext"
 
@@ -33,12 +35,14 @@ function App() {
   }
 
   return (
-    <UserContext.Provider value={setUser}>
+    <UserContext.Provider value={{user,setUser}}>
       <Routes>
         <Route element={<PrivateRoutes user={user} />}>
           <Route path='/' element={<Home />}/>
           <Route path='/recipes' element={<Recipes />}/>
+          <Route path='/addRecipes' element={<AddRecipeForm />} />
           <Route path='/grocery' element={<Grocery />}/>
+          <Route path='/calendar' element={<Calendar />} />
         </Route>
       
 

@@ -1,12 +1,24 @@
 import React from "react"
 import NavBar from "../components/NavBar"
+import Calendar from '../components/Calendar'
+import '../styles/home.css'
+import {useNavigate} from "react-router-dom"
 
 function Home() {
+  const navigate = useNavigate()
+
+  function handleStart() {
+    navigate('/recipes')
+  }
+
   return (
-    <>
-    <NavBar />
-    <p>This component will have a calendar and links to the other tabs such as recipes and grocery list</p>
-    </>
+    <div>
+      <NavBar />
+      <div className='home-content'>
+        <button className='start-button' onClick={handleStart}>Start Meal Planning</button>
+        <Calendar className='calendar'/>
+      </div>
+    </div>
   )
 }
 
