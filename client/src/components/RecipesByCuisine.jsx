@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react"
 import { recipesByCuisine } from "../api/spoonacular"
+import '../styles/recipePage.css'
 
 function RecipesByCuisine({cuisine}) {
   const [recipes, setRecipes] = useState([])
@@ -25,19 +26,19 @@ function RecipesByCuisine({cuisine}) {
   },[cuisine])
 
   if (loading) {
-    return <p>Loading recipes for {cuisine}...</p>
+    return <p className='loading-message'>Loading recipes for {cuisine}...</p>
   }
   if (error) {
     return <p>{error}</p>
   }
   if (recipes.length === 0) {
-    return <p>No recipes found for {cuisine}</p>
+    return <p className='error-message'>No recipes found for {cuisine}</p>
   }
 
   return (
-    <div>
+    <div className='recipes-by-cuisine-div'>
       {recipes.map((recipe) => (
-        <div key={recipe.id}>
+        <div key={recipe.id} className='recipes-by-cuisine'>
           <h3>{recipe.title}</h3>
           <button>View Recipe</button>
         </div>

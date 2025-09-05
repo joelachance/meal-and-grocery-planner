@@ -2,7 +2,7 @@
   justify-content: center;
   justify-items: center; 
   max-width: 600px;
-  margin: 60px auto;
+  margin: 60px auto 0px auto;
   padding: 30px;
   background-color: #87CEFA;
   border-radius: 12px;
@@ -34,6 +34,17 @@
   outline: none;
   border-color: #7FFFD4;
   box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+}
+
+.add-recipe-form button {
+  border: 2px solid #B0B0B0;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 17px;
+}
+
+.add-recipe-form button:hover {
+  background-color: #B0B0B0;
 }
 
 #instructions {
@@ -138,5 +149,13 @@
 
 .header-and-button button:hover {
   background-color: #E0CFF5;
+}
+
+.submit-recipe-p {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  font-size: 20px;
+  color: #8B0000;
 }
 

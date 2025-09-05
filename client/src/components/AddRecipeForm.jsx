@@ -80,8 +80,9 @@ function AddRecipeForm() {
           </div>
         </form>
       </div>
+      <p className='submit-recipe-p'>Please submit your recipe before adding ingredients</p>
       <div className='add-ingredients-button-div'>
-      <button onClick={handleAddIngredient} className='add-ingredients-button' >Add Ingredients</button>
+        <button onClick={handleAddIngredient} className='add-ingredients-button' >Add Ingredients</button>
       </div>
       {ingredientForms.length > 0 && 
       <div> 
