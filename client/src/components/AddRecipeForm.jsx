@@ -7,7 +7,7 @@ import {useNavigate} from "react-router-dom"
 import '../styles/recipeIngredientForms.css'
 
 function AddRecipeForm() {
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const [newRecipe, setNewRecipe] = useState({title: "", instructions: "", date:""})
   const [errors, setErrors] = useState({})
   const [recipeId, setRecipeId] = useState("")
@@ -36,7 +36,12 @@ function AddRecipeForm() {
     const result = await createRecipe(newRecipe)
     if (!result.error) {
       alert('Recipe successfully added!')
+      //store the id in state so it can be passed to the add ingredient form
       setRecipeId(result.id)
+      //update state so the new recipe shows up on the calendar
+      setUser(prev => ({
+        ...prev, recipes: [...prev.recipes, newRecipe]
+      }))
     } else {
       alert('Error adding recipe, please try again.')
       setErrors(result.error)
