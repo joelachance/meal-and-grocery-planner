@@ -31,7 +31,26 @@ function AddRecipeForm() {
       alert ('Error connecting to user, cannot create recipe.')
       return
     }
-
+    //check for any invalid data in the form
+    let newErrors = {}
+    if (!newRecipe.title || newRecipe.title.trim() === "") {
+      newErrors.title = 'Title cannot be empty'
+    }
+    if (!newRecipe.instructions || newRecipe.instructions === "") {
+      newErrors.instructions = 'Instructions cannot be empty'
+    }
+    if (!newRecipe.date || newRecipe.date === "") {
+      newErrors.date = 'Not a valid date'
+    }
+    const today = new Date()
+    const threeWeeksAgo = new Date()
+    threeWeeksAgo.setDate(today.getDate() - 21)
+    if(newRecipe.date && new Date(newRecipe.date) < threeWeeksAgo ) {
+      newErrors.date = 'Date is too far in the past'
+    }
+    setErrors(newErrors)
+    //if there are errors, dont try and make the POST request
+    if (Object.keys(newErrors).length > 0) return
     //call POST request
     const result = await createRecipe(newRecipe)
     if (!result.error) {
@@ -66,14 +85,17 @@ function AddRecipeForm() {
           <div>
             <label htmlFor='title'>Title:</label>
             <input id='title' name='title' type='text' value={newRecipe.title} onChange={handleChange}/>
+            {errors?.title && <p className='errors'>{errors.title}</p>}
           </div>
           <div>
             <label htmlFor='instructions'>Instructions:</label>
             <textarea id='instructions' name='instructions' type='text' value={newRecipe.instructions} onChange={handleChange}/>
+            {errors?.instructions && <p className='errors'>{errors.instructions}</p>}
           </div>
           <div>
             <label htmlFor='date'>Date:</label>
             <input id='date' name='date' type='date' value={newRecipe.date} onChange={handleChange}/>
+            {errors?.date && <p className='errors'>{errors.date}</p>}
           </div>
           <div>
             <button type='submit'>Submit</button>
