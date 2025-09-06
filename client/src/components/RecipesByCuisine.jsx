@@ -1,11 +1,13 @@
 import {useState, useEffect} from "react"
 import { recipesByCuisine } from "../api/spoonacular"
 import '../styles/recipePage.css'
+import RecipeModal from "./RecipeModal"
 
 function RecipesByCuisine({cuisine}) {
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [recipeModal, setRecipeModal] = useState(false)
 
   useEffect(() => {
     if (!cuisine) return
@@ -25,6 +27,10 @@ function RecipesByCuisine({cuisine}) {
     fetchRecipes()
   },[cuisine])
 
+  function handleViewRecipe() {
+    setRecipeModal(true)
+  }
+
   if (loading) {
     return <p className='loading-message'>Loading recipes for {cuisine}...</p>
   }
@@ -40,9 +46,12 @@ function RecipesByCuisine({cuisine}) {
       {recipes.map((recipe) => (
         <div key={recipe.id} className='recipes-by-cuisine'>
           <h3>{recipe.title}</h3>
-          <button>View Recipe</button>
+          <button onClick={handleViewRecipe}>View Recipe</button>
         </div>
       ))}
+      {recipeModal &&
+        <RecipeModal />
+      }
     </div>
   )
 }
