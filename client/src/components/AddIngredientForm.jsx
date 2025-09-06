@@ -38,13 +38,13 @@ function AddIngredientForm({recipe_id}) {
   return (
     <div className='add-ingredient-form-div'>
       <form className='add-ingredient-form' onSubmit={handleSubmit}>
-          <label htmlFor='name'>Name:</label>
-          <input id='name' name='name' type='text' value={newIngredient.name} onChange={handleChange}/>
-          <label htmlFor='quantity'>Quantity:</label>
-          <input id='quantity' name='quantity' type='number' value={newIngredient.quantity} onChange={handleChange}/>
-          <label htmlFor='quantity_description'>Quantity description (oz, cups, lbs, ect.):</label>
-          <input id='quantity_description' name='quantity_description' type='text' value={newIngredient.quantity_description} onChange={handleChange}/>
-          <button type='submit'>Submit</button>
+        <label htmlFor='name'>Name:</label>
+        <input id='name' name='name' type='text' value={newIngredient.name} onChange={handleChange}/>
+        <label htmlFor='quantity'>Quantity:</label>
+        <input id='quantity' name='quantity' type='number' value={newIngredient.quantity} onChange={handleChange}/>
+        <label htmlFor='quantity_description'>Quantity description (oz, cups, lbs, ect.):</label>
+        <input id='quantity_description' name='quantity_description' type='text' value={newIngredient.quantity_description} onChange={handleChange}/>
+        <button type='submit'>Submit</button>
       </form>
     </div>
   )

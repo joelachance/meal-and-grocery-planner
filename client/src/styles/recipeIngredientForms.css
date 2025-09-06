@@ -92,8 +92,9 @@
 
 /* style add ingredient forms */
 .add-ingredient-form-div {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
-  justify-items: center;
   margin: 20px 425px;
   background-color: #fadadd;
   padding: 30px;
@@ -121,6 +122,25 @@
 
 .add-ingredient-form-div button:hover {
   background-color: #B0B0B0;
+}
+
+.add-ingredient-form {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  width: 900px;
+  margin-bottom: 5px;
+}
+
+.add-ingredient-form input {
+  height: 20px;
+  margin-top: 18px;
+}
+
+
+.add-ingredient-form button {
+  height: 30px;
+  margin-top: 17px;
 }
 
 .ingredient-header {

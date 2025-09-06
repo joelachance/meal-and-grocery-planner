@@ -72,8 +72,3 @@
   font-size: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-.add-ingredient-div {
-  display: flex;
-  flex-direction: row;
-}
