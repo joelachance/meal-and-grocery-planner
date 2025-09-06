@@ -8,6 +8,7 @@ function RecipesByCuisine({cuisine}) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [recipeModal, setRecipeModal] = useState(false)
+   const [selectedRecipe, setSelectedRecipe] = useState(null)
 
   useEffect(() => {
     if (!cuisine) return
@@ -27,8 +28,13 @@ function RecipesByCuisine({cuisine}) {
     fetchRecipes()
   },[cuisine])
 
-  function handleViewRecipe() {
+  function handleViewRecipe(recipe) {
+    setSelectedRecipe(recipe)
     setRecipeModal(true)
+  }
+
+  function closeModal() {
+    setRecipeModal(false)
   }
 
   if (loading) {
@@ -46,11 +52,11 @@ function RecipesByCuisine({cuisine}) {
       {recipes.map((recipe) => (
         <div key={recipe.id} className='recipes-by-cuisine'>
           <h3>{recipe.title}</h3>
-          <button onClick={handleViewRecipe}>View Recipe</button>
+          <button onClick={() => handleViewRecipe(recipe)}>View Recipe</button>
         </div>
       ))}
-      {recipeModal &&
-        <RecipeModal />
+      {recipeModal && selectedRecipe &&
+        <RecipeModal recipe={selectedRecipe} onClose={closeModal}/>
       }
     </div>
   )
