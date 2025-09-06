@@ -3,10 +3,13 @@ import "../styles/editIngredients.css"
 import { deleteIngredient, editIngredient } from "../api/ingredients"
 import {useContext} from "react"
 import {UserContext} from '../UserContext'
+import AddIngredientForm from "./AddIngredientForm"
+
 
 function EditIngredientsForm({recipe}) {
   const { user, setUser } = useContext(UserContext)
   const [editedIngredients, setEditedIngredients] = useState([])
+  const [addIngredientStatus, setAddIngredientStatus] = useState(false)
 
   useEffect(() => {
     if (recipe[0]) {
@@ -14,10 +17,24 @@ function EditIngredientsForm({recipe}) {
     }
   }, [recipe])
 
+  function handleAddIngredients() {
+    setAddIngredientStatus(true)
+  }
+
   if (editedIngredients.length === 0) {
-    return <div className='no-ingredients-div'>
-        <p>Recipe has no ingredients</p>
-        <button>Add Ingredients</button>
+    return <div>
+        {!addIngredientStatus &&
+          <div className='no-ingredients-div'>
+            <p>Recipe has no ingredients</p>
+            <button onClick={handleAddIngredients}>Add Ingredients</button>
+          </div>
+        }
+        {addIngredientStatus && 
+            <div>
+              <h3>Add Ingredient for {recipe[0].title}</h3>
+              <AddIngredientForm recipe_id = {recipe[0].id}/>
+            </div>
+          }
       </div>
   }
 
@@ -40,6 +57,7 @@ function EditIngredientsForm({recipe}) {
 
   async function handleSubmit(index, event) {
     event.preventDefault()
+    setAddIngredientStatus(false)
     const recipeId = recipe[0].id
     const ingredientId = editedIngredients[index].id
     const content = editedIngredients[index]
@@ -107,6 +125,15 @@ function EditIngredientsForm({recipe}) {
           </form>
         </div>
       ))}
+      <button className='add-ingredient-button' onClick={handleAddIngredients}>Add an Ingredient</button>
+      {addIngredientStatus && 
+          <div >
+            <h3>Add Ingredient for {recipe[0].title}</h3>
+            <div className='add-ingredient-div'>
+            <AddIngredientForm recipe_id = {recipe[0].id}/>
+            </div>
+          </div>
+        }
     </div>
   )
 }

@@ -2,7 +2,6 @@ import {addIngredient} from '../api/ingredients'
 import {useState} from 'react'
 import {UserContext} from '../UserContext'
 import {useContext} from "react"
-import {useNavigate} from "react-router-dom"
 
 function AddIngredientForm({recipe_id}) {
   const { user, setUser } = useContext(UserContext)

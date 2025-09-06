@@ -53,7 +53,8 @@
   padding: 5px;
 }
 
-.no-ingredients-div button {
+.no-ingredients-div button,
+.add-ingredient-button {
   padding: 7px;
   border: none;
   border-radius: 5px;
@@ -62,11 +63,17 @@
   background-color: #F5BFC2;
 }
 
-.no-ingredients-div button:hover {
+.no-ingredients-div button:hover,
+.add-ingredient-button:hover {
   background-color: #fadadd;
 }
 
 .no-ingredients-div p {
   font-size: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-ingredient-div {
+  display: flex;
+  flex-direction: row;
 }
