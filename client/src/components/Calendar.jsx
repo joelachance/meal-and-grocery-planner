@@ -38,7 +38,10 @@ function Calendar() {
       />
       <p className='home-directions'>Click on a recipe to view or edit</p>
       {selectedEvent && (
-        <EventModal event={selectedEvent} onClose={closeModal}/>
+        <>
+          <div className="modal-overlay" onClick={closeModal}></div>
+          <EventModal event={selectedEvent} onClose={closeModal}/>
+        </>
       )}
     </div>
   )
