@@ -8,13 +8,15 @@ import '../styles/grocery.css'
 function Grocery() {
   const { user } = useContext(UserContext)
   const [recipes, setRecipes] = useState([])
-  const [dates, setDates] = useState({ start: "", end: "" })
+  const today = new Date().toLocaleDateString('en-CA')
+  const date =  new Date()
+  date.setDate(date.getDate() + 7)
+  const week = date.toLocaleDateString('en-CA')
+  const [dates, setDates] = useState({ start: today, end: week })
   const [filteredIngredients, setFilteredIngredients] = useState([])
   const [errorMessage, setErrorMessage] = useState("")
   const [hasSubmitted, setHasSubmitted] = useState(false)
   
-
-
   useEffect(() => {
     if(user) {
       setRecipes(user.recipes)
@@ -74,7 +76,7 @@ function Grocery() {
               {filteredIngredients.map((ingredient) => (
                   <li key={ingredient.id}>
                     <input type='checkbox' id={ingredient.name}/>
-                    <label htmlFor={ingredient.name} class='strikethrough'>{ingredient.name} ({ingredient.quantity} {ingredient.quantity_description}) </label>
+                    <label htmlFor={ingredient.name} className='strikethrough'>{ingredient.name} ({ingredient.quantity} {ingredient.quantity_description}) </label>
                   </li>
                 ))
               }

@@ -76,6 +76,7 @@
   margin-top: 20px
 }
 
+/* blur background behind modal*/
 .modal-overlay {
   position: fixed;
   top: 0;
