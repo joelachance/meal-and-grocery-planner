@@ -126,9 +126,10 @@
 
 .add-ingredient-form {
   display: flex;
-  flex-direction: row;
-  height: 50px;
+  flex-direction: column;
+  
   width: 900px;
+  height: auto;
   margin-bottom: 5px;
 }
 
@@ -147,6 +148,15 @@
   text-align: left;
   margin: 20px 425px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+}
+
+.error-div {
+  color: #FF0000
 }
 
 /* style add your own recipe button */
