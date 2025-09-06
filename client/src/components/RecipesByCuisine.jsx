@@ -56,7 +56,10 @@ function RecipesByCuisine({cuisine}) {
         </div>
       ))}
       {recipeModal && selectedRecipe &&
-        <RecipeModal recipe={selectedRecipe} onClose={closeModal}/>
+        <>
+          <div className="modal-overlay" onClick={closeModal}></div>
+          <RecipeModal recipe={selectedRecipe} onClose={closeModal}/>
+        </>
       }
     </div>
   )
