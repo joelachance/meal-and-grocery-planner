@@ -125,7 +125,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
       }
       {editIngredientsStatus === true && 
         <div>
-          <EditIngredientsForm recipe={[currentRecipe]}/>
+          <EditIngredientsForm recipeObject={[currentRecipe]}/>
           <button className='back-button' type='button' onClick={handleIngredientBack}>Back</button>
         </div>
       }

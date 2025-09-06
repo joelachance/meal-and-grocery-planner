@@ -6,16 +6,15 @@ import {UserContext} from '../UserContext'
 import AddIngredientForm from "./AddIngredientForm"
 
 
-function EditIngredientsForm({recipe}) {
+function EditIngredientsForm({recipeObject}) {
   const { user, setUser } = useContext(UserContext)
   const [editedIngredients, setEditedIngredients] = useState([])
   const [addIngredientStatus, setAddIngredientStatus] = useState(false)
-
   useEffect(() => {
-    if (recipe[0]) {
-      setEditedIngredients(recipe[0].ingredients || [])
+    if (recipeObject[0]) {
+      setEditedIngredients(recipeObject[0].ingredients || [])
     }
-  }, [recipe])
+  }, [recipeObject])
 
   function handleAddIngredients() {
     setAddIngredientStatus(true)
@@ -31,8 +30,8 @@ function EditIngredientsForm({recipe}) {
         }
         {addIngredientStatus && 
             <div>
-              <h3>Add Ingredient for {recipe[0].title}</h3>
-              <AddIngredientForm recipe_id = {recipe[0].id}/>
+              <h3>Add Ingredient for {recipeObject[0].title}</h3>
+              <AddIngredientForm recipe_id = {recipeObject[0].id}/>
             </div>
           }
       </div>
@@ -58,10 +57,10 @@ function EditIngredientsForm({recipe}) {
   async function handleSubmit(index, event) {
     event.preventDefault()
     setAddIngredientStatus(false)
-    const recipeId = recipe[0].id
+    const recipeId = recipeObject[0].id
     const ingredientId = editedIngredients[index].id
     const content = editedIngredients[index]
-    const {checked_off, id, ...rest} = content
+    const {checked_off, id, recipe, ...rest} = content
     const result = await editIngredient(recipeId, ingredientId, rest)
     if (!result.error) {
       alert('Ingredient successfully updated')
@@ -87,7 +86,7 @@ function EditIngredientsForm({recipe}) {
 
   async function handleDelete(index, event) {
     const ingredientId = editedIngredients[index].id
-    const recipeId = recipe[0].id
+    const recipeId = recipeObject[0].id
     const result = await deleteIngredient(recipeId,ingredientId)
     if (!result.error) {
       alert('Ingredient successfully deleted!')
@@ -112,7 +111,7 @@ function EditIngredientsForm({recipe}) {
     <div className='ingredients-div'>
       {!addIngredientStatus &&
       <div>
-        <h2>Edit Ingredients for {recipe[0].title}</h2>
+        <h2>Edit Ingredients for {recipeObject[0].title}</h2>
         {editedIngredients.map((ingredient, index) => (
           <div key={ingredient.id} className='ingredient-form-div'>
             <form className='ingredient-form' onSubmit={(event) => handleSubmit(index,event)}>
@@ -132,8 +131,8 @@ function EditIngredientsForm({recipe}) {
       }
       {addIngredientStatus && 
           <div >
-            <h3>Add Ingredient for {recipe[0].title}</h3>
-              <AddIngredientForm recipe_id = {recipe[0].id}/>
+            <h3>Add Ingredient for {recipeObject[0].title}</h3>
+              <AddIngredientForm recipe_id = {recipeObject[0].id}/>
           </div>
         }
     </div>
