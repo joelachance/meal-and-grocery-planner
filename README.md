@@ -111,7 +111,7 @@ Retrieve information for a specific recipe from Spoonacular API
   ```
 * Starting the frontend
   ```bash
-  (in the client directory, separate terminal from the backend server)
+  (from the client directory and separate terminal from the backend server)
   npm run dev 
   ```
 * Copy the localhost link into your browser to view and interact with the application <br>
