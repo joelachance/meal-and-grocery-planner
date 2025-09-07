@@ -3,14 +3,13 @@ My fullstack app with a Python Flask backend and React frontend makes meal plann
 Features:
 * Discover and explore recipes by cuisine
 * Add your own recipes
-* Schedule meals directly on a built-in calendar
+* Schedule and view or edit them on your calendar
 * Automatically generate a weekly grocery list based on planned dishes 
 
 ## Skills Practiced
 * User authentication with JSON Web Tokens (JWT)
 * Model and schema validations
 * Filtering and manipulating data from an API
-* Saving data from an API to a database
 * React router
 * Full CRUD functionality
 * Connecting a flask backend to a react frontend
@@ -112,8 +111,12 @@ Retrieve information for a specific recipe from Spoonacular API
   ```
 * Starting the frontend
   ```bash
+  (in the client directory, separate terminal from the backend server)
   npm run dev 
-  (separate terminal from the backend server)
   ```
 * Copy the localhost link into your browser to view and interact with the application <br>
 http://localhost:5173/
+
+### Future refactors
+1. The API I chose to use had some limitations such as not allowing me to store data in a database and only allowing 50 API calls a day with the free version. Due to this, my application currently does not allow saving the recipes from the api, only viewing them. With more time, I will figure out how to work around these limitations or find a different way to let users browse recipes such as creating a file with recipes I have found myself and using that instead of the api. <br> <br>
+2. Also due to time constraints, my application does not currently use my table for recipe notes. In the future I would like to add in a page where you can search for a recipe and view any notes you have made about that recipe. 
