@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {createRecipe} from '../api/recipes'
 import AddIngredientForm from './AddIngredientForm'
 import {useContext} from "react"
@@ -31,7 +31,26 @@ function AddRecipeForm() {
       alert ('Error connecting to user, cannot create recipe.')
       return
     }
-
+    //check for any invalid data in the form
+    let newErrors = {}
+    if (!newRecipe.title || newRecipe.title.trim() === "") {
+      newErrors.title = 'Title cannot be empty'
+    }
+    if (!newRecipe.instructions || newRecipe.instructions === "") {
+      newErrors.instructions = 'Instructions cannot be empty'
+    }
+    if (!newRecipe.date || newRecipe.date === "") {
+      newErrors.date = 'Not a valid date'
+    }
+    const today = new Date()
+    const threeWeeksAgo = new Date()
+    threeWeeksAgo.setDate(today.getDate() - 21)
+    if(newRecipe.date && new Date(newRecipe.date) < threeWeeksAgo ) {
+      newErrors.date = 'Date is too far in the past'
+    }
+    setErrors(newErrors)
+    //if there are errors, dont try and make the POST request
+    if (Object.keys(newErrors).length > 0) return
     //call POST request
     const result = await createRecipe(newRecipe)
     if (!result.error) {
@@ -65,23 +84,27 @@ function AddRecipeForm() {
         <form className='add-recipe-form' onSubmit={handleSubmit}>
           <div>
             <label htmlFor='title'>Title:</label>
-            <input id='title' name='title' type='text' value={newRecipe.title} onChange={handleChange}/>
+            <input id='title' name='title' type='text' value={newRecipe.title} onChange={handleChange} autoComplete='off'/>
+            {errors?.title && <p className='errors'>{errors.title}</p>}
           </div>
           <div>
             <label htmlFor='instructions'>Instructions:</label>
-            <textarea id='instructions' name='instructions' type='text' value={newRecipe.instructions} onChange={handleChange}/>
+            <textarea id='instructions' name='instructions' type='text' value={newRecipe.instructions} onChange={handleChange} autoComplete='off'/>
+            {errors?.instructions && <p className='errors'>{errors.instructions}</p>}
           </div>
           <div>
             <label htmlFor='date'>Date:</label>
-            <input id='date' name='date' type='date' value={newRecipe.date} onChange={handleChange}/>
+            <input id='date' name='date' type='date' value={newRecipe.date} onChange={handleChange} autoComplete='off'/>
+            {errors?.date && <p className='errors'>{errors.date}</p>}
           </div>
           <div>
             <button type='submit'>Submit</button>
           </div>
         </form>
       </div>
+      <p className='submit-recipe-p'>Please submit your recipe before adding ingredients</p>
       <div className='add-ingredients-button-div'>
-      <button onClick={handleAddIngredient} className='add-ingredients-button' >Add Ingredients</button>
+        <button onClick={handleAddIngredient} className='add-ingredients-button' >Add Ingredients</button>
       </div>
       {ingredientForms.length > 0 && 
       <div> 

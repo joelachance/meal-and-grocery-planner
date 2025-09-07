@@ -86,17 +86,17 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
             <form className='edit-recipe-form' onSubmit={handleSubmit}>
               <div>
                 <label htmlFor='title'>Title:</label>
-                <input id='title' name='title' type='text' value={editedRecipe.title} onChange={handleChange}/>
+                <input id='title' name='title' type='text' value={editedRecipe.title} onChange={handleChange} autoComplete='off'/>
                 {errors && <p className='errors'>{errors.title}</p>}
               </div>
               <div>
                 <label htmlFor='instructions'>Instructions:</label>
-                <textarea id='instructions' name='instructions' type='text' value={editedRecipe.instructions} onChange={handleChange}/>
+                <textarea id='instructions' name='instructions' type='text' value={editedRecipe.instructions} onChange={handleChange} autoComplete='off'/>
                 {errors && <p className='errors'>{errors.instructions}</p>}
               </div>
               <div>
                 <label htmlFor='date'>Date:</label>
-                <input id='date' name='date' type='date' value={editedRecipe.date} onChange={handleChange}/>
+                <input id='date' name='date' type='date' value={editedRecipe.date} onChange={handleChange} autoComplete='off'/>
                 {errors && <p className='errors'>{errors.date}</p>}
               </div>
               <div>
@@ -125,7 +125,7 @@ function EditRecipeForm({setEditStatus, recipe, onClose}) {
       }
       {editIngredientsStatus === true && 
         <div>
-          <EditIngredientsForm recipe={[currentRecipe]}/>
+          <EditIngredientsForm recipeObject={[currentRecipe]}/>
           <button className='back-button' type='button' onClick={handleIngredientBack}>Back</button>
         </div>
       }

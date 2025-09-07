@@ -1,10 +1,14 @@
 import {useState, useEffect} from "react"
 import { recipesByCuisine } from "../api/spoonacular"
+import '../styles/recipePage.css'
+import RecipeModal from "./RecipeModal"
 
 function RecipesByCuisine({cuisine}) {
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [recipeModal, setRecipeModal] = useState(false)
+   const [selectedRecipe, setSelectedRecipe] = useState(null)
 
   useEffect(() => {
     if (!cuisine) return
@@ -24,24 +28,39 @@ function RecipesByCuisine({cuisine}) {
     fetchRecipes()
   },[cuisine])
 
+  function handleViewRecipe(recipe) {
+    setSelectedRecipe(recipe)
+    setRecipeModal(true)
+  }
+
+  function closeModal() {
+    setRecipeModal(false)
+  }
+
   if (loading) {
-    return <p>Loading recipes for {cuisine}...</p>
+    return <p className='loading-message'>Loading recipes for {cuisine}...</p>
   }
   if (error) {
     return <p>{error}</p>
   }
   if (recipes.length === 0) {
-    return <p>No recipes found for {cuisine}</p>
+    return <p className='error-message'>No recipes found for {cuisine}</p>
   }
 
   return (
-    <div>
+    <div className='recipes-by-cuisine-div'>
       {recipes.map((recipe) => (
-        <div key={recipe.id}>
+        <div key={recipe.id} className='recipes-by-cuisine'>
           <h3>{recipe.title}</h3>
-          <button>View Recipe</button>
+          <button onClick={() => handleViewRecipe(recipe)}>View Recipe</button>
         </div>
       ))}
+      {recipeModal && selectedRecipe &&
+        <>
+          <div className="modal-overlay" onClick={closeModal}></div>
+          <RecipeModal recipe={selectedRecipe} onClose={closeModal}/>
+        </>
+      }
     </div>
   )
 }

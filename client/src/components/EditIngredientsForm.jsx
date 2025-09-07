@@ -3,21 +3,37 @@ import "../styles/editIngredients.css"
 import { deleteIngredient, editIngredient } from "../api/ingredients"
 import {useContext} from "react"
 import {UserContext} from '../UserContext'
+import AddIngredientForm from "./AddIngredientForm"
 
-function EditIngredientsForm({recipe}) {
+
+function EditIngredientsForm({recipeObject}) {
   const { user, setUser } = useContext(UserContext)
   const [editedIngredients, setEditedIngredients] = useState([])
-
+  const [addIngredientStatus, setAddIngredientStatus] = useState(false)
   useEffect(() => {
-    if (recipe[0]) {
-      setEditedIngredients(recipe[0].ingredients || [])
+    if (recipeObject[0]) {
+      setEditedIngredients(recipeObject[0].ingredients || [])
     }
-  }, [recipe])
+  }, [recipeObject])
+
+  function handleAddIngredients() {
+    setAddIngredientStatus(true)
+  }
 
   if (editedIngredients.length === 0) {
-    return <div className='no-ingredients-div'>
-        <p>Recipe has no ingredients</p>
-        <button>Add Ingredients</button>
+    return <div>
+        {!addIngredientStatus &&
+          <div className='no-ingredients-div'>
+            <p>Recipe has no ingredients</p>
+            <button onClick={handleAddIngredients}>Add Ingredients</button>
+          </div>
+        }
+        {addIngredientStatus && 
+            <div>
+              <h3>Add Ingredient for {recipeObject[0].title}</h3>
+              <AddIngredientForm recipe_id = {recipeObject[0].id}/>
+            </div>
+          }
       </div>
   }
 
@@ -40,10 +56,11 @@ function EditIngredientsForm({recipe}) {
 
   async function handleSubmit(index, event) {
     event.preventDefault()
-    const recipeId = recipe[0].id
+    setAddIngredientStatus(false)
+    const recipeId = recipeObject[0].id
     const ingredientId = editedIngredients[index].id
     const content = editedIngredients[index]
-    const {checked_off, id, ...rest} = content
+    const {checked_off, id, recipe, ...rest} = content
     const result = await editIngredient(recipeId, ingredientId, rest)
     if (!result.error) {
       alert('Ingredient successfully updated')
@@ -69,7 +86,7 @@ function EditIngredientsForm({recipe}) {
 
   async function handleDelete(index, event) {
     const ingredientId = editedIngredients[index].id
-    const recipeId = recipe[0].id
+    const recipeId = recipeObject[0].id
     const result = await deleteIngredient(recipeId,ingredientId)
     if (!result.error) {
       alert('Ingredient successfully deleted!')
@@ -92,21 +109,32 @@ function EditIngredientsForm({recipe}) {
 
   return (
     <div className='ingredients-div'>
-      <h2>Edit Ingredients for {recipe[0].title}</h2>
-      {editedIngredients.map((ingredient, index) => (
-        <div key={ingredient.id} className='ingredient-form-div'>
-          <form className='ingredient-form' onSubmit={(event) => handleSubmit(index,event)}>
-            <label htmlFor='name' >Name:</label>
-            <input type='text' id='name' name='name' value={editedIngredients[index].name}  onChange={(event) => handleIngredientChange(index,event)}/>
-            <label htmlFor='quantity'>Quantity:</label>
-            <input type='number' id='quantity' name='quantity' value={editedIngredients[index].quantity}  onChange={(event) => handleIngredientChange(index,event)}/>
-            <label htmlFor='quantity_description'>Qantity Description:</label>
-            <input type='text' id='quantity_description' name='quantity_description' value={editedIngredients[index].quantity_description}  onChange={(event) => handleIngredientChange(index,event)}/>
-            <button type='submit' className='ingredient-submit-button'>Submit</button>
-            <button className='delete-ingredient-button' type="button" onClick={(event) => handleDelete(index,event)}>Delete Ingredient</button>
-          </form>
-        </div>
-      ))}
+      {!addIngredientStatus &&
+      <div>
+        <h2>Edit Ingredients for {recipeObject[0].title}</h2>
+        {editedIngredients.map((ingredient, index) => (
+          <div key={ingredient.id} className='ingredient-form-div'>
+            <form className='ingredient-form' onSubmit={(event) => handleSubmit(index,event)}>
+              <label htmlFor='name' >Name:</label>
+              <input type='text' id='name' name='name' value={editedIngredients[index].name}  onChange={(event) => handleIngredientChange(index,event)} autoComplete='off'/>
+              <label htmlFor='quantity'>Quantity:</label>
+              <input type='number' id='quantity' name='quantity' min='1' value={editedIngredients[index].quantity}  onChange={(event) => handleIngredientChange(index,event)} autoComplete='off'/>
+              <label htmlFor='quantity_description'>Qantity Description:</label>
+              <input type='text' id='quantity_description' name='quantity_description' value={editedIngredients[index].quantity_description}  onChange={(event) => handleIngredientChange(index,event)} autoComplete='off'/>
+              <button type='submit' className='ingredient-submit-button'>Submit</button>
+              <button className='delete-ingredient-button' type="button" onClick={(event) => handleDelete(index,event)}>Delete Ingredient</button>
+            </form>
+          </div>
+        ))}
+        <button className='add-ingredient-button' onClick={handleAddIngredients}>Add an Ingredient</button>
+      </div>
+      }
+      {addIngredientStatus && 
+          <div >
+            <h3>Add Ingredient for {recipeObject[0].title}</h3>
+              <AddIngredientForm recipe_id = {recipeObject[0].id}/>
+          </div>
+        }
     </div>
   )
 }
