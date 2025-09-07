@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import {createRecipe} from '../api/recipes'
 import AddIngredientForm from './AddIngredientForm'
 import {useContext} from "react"
@@ -84,17 +84,17 @@ function AddRecipeForm() {
         <form className='add-recipe-form' onSubmit={handleSubmit}>
           <div>
             <label htmlFor='title'>Title:</label>
-            <input id='title' name='title' type='text' value={newRecipe.title} onChange={handleChange}/>
+            <input id='title' name='title' type='text' value={newRecipe.title} onChange={handleChange} autoComplete='off'/>
             {errors?.title && <p className='errors'>{errors.title}</p>}
           </div>
           <div>
             <label htmlFor='instructions'>Instructions:</label>
-            <textarea id='instructions' name='instructions' type='text' value={newRecipe.instructions} onChange={handleChange}/>
+            <textarea id='instructions' name='instructions' type='text' value={newRecipe.instructions} onChange={handleChange} autoComplete='off'/>
             {errors?.instructions && <p className='errors'>{errors.instructions}</p>}
           </div>
           <div>
             <label htmlFor='date'>Date:</label>
-            <input id='date' name='date' type='date' value={newRecipe.date} onChange={handleChange}/>
+            <input id='date' name='date' type='date' value={newRecipe.date} onChange={handleChange} autoComplete='off'/>
             {errors?.date && <p className='errors'>{errors.date}</p>}
           </div>
           <div>

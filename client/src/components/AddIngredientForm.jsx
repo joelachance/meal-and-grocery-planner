@@ -55,14 +55,11 @@ function AddIngredientForm({recipe_id}) {
       <form className='add-ingredient-form' onSubmit={handleSubmit}>
         <div className='form-row'>
           <label htmlFor='name'>Name:</label>
-          <input id='name' name='name' type='text' value={newIngredient.name} onChange={handleChange}/>
-          {/* {errors?.name && <p>{errors.name}</p>} */}
+          <input id='name' name='name' type='text' value={newIngredient.name} onChange={handleChange} autoComplete='off'/>
           <label htmlFor='quantity'>Quantity:</label>
-          <input id='quantity' name='quantity' type='number' min="1" value={newIngredient.quantity} onChange={handleChange}/>
-          {/* {errors?.quantity && <p>{errors.quantity}</p>} */}
+          <input id='quantity' name='quantity' type='number' min="1" value={newIngredient.quantity} onChange={handleChange} autoComplete='off'/>
           <label htmlFor='quantity_description'>Quantity description (oz, cups, lbs, ect.):</label>
-          <input id='quantity_description' name='quantity_description' type='text' value={newIngredient.quantity_description} onChange={handleChange}/>
-          {/* {errors?.quantity_description && <p>{errors.quantity_description}</p>} */}
+          <input id='quantity_description' name='quantity_description' type='text' value={newIngredient.quantity_description} onChange={handleChange} autoComplete='off'/>
           <button type='submit'>Submit</button>
         </div>
         {errors &&

@@ -116,11 +116,11 @@ function EditIngredientsForm({recipeObject}) {
           <div key={ingredient.id} className='ingredient-form-div'>
             <form className='ingredient-form' onSubmit={(event) => handleSubmit(index,event)}>
               <label htmlFor='name' >Name:</label>
-              <input type='text' id='name' name='name' value={editedIngredients[index].name}  onChange={(event) => handleIngredientChange(index,event)}/>
+              <input type='text' id='name' name='name' value={editedIngredients[index].name}  onChange={(event) => handleIngredientChange(index,event)} autoComplete='off'/>
               <label htmlFor='quantity'>Quantity:</label>
-              <input type='number' id='quantity' name='quantity' value={editedIngredients[index].quantity}  onChange={(event) => handleIngredientChange(index,event)}/>
+              <input type='number' id='quantity' name='quantity' min='1' value={editedIngredients[index].quantity}  onChange={(event) => handleIngredientChange(index,event)} autoComplete='off'/>
               <label htmlFor='quantity_description'>Qantity Description:</label>
-              <input type='text' id='quantity_description' name='quantity_description' value={editedIngredients[index].quantity_description}  onChange={(event) => handleIngredientChange(index,event)}/>
+              <input type='text' id='quantity_description' name='quantity_description' value={editedIngredients[index].quantity_description}  onChange={(event) => handleIngredientChange(index,event)} autoComplete='off'/>
               <button type='submit' className='ingredient-submit-button'>Submit</button>
               <button className='delete-ingredient-button' type="button" onClick={(event) => handleDelete(index,event)}>Delete Ingredient</button>
             </form>
