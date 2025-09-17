@@ -2,8 +2,12 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from marshmallow import Schema, fields, ValidationError, validate
 from marshmallow.validate import Range, Length
+<<<<<<< HEAD
 from server.extensions import bcrypt
 from .app import db
+=======
+from .extensions import bcrypt, db
+>>>>>>> dd28898 (refactored layout, use readme for updated instructions to run.;Implement hybrid approach for Flask app structure;)
 import re
 from datetime import date, timedelta
 
